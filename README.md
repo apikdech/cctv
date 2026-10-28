@@ -29,10 +29,11 @@ the city camera of that number.
 
 Press **Add to wall** on any row in the list (or in the player) to collect up to
 8 cameras. **Wall (n)** at the top-right of the map opens them as a grid filling
-the window. `M` goes back to the map, `F` or a double-click makes one tile
-fullscreen, drag a tile onto another to swap places, and ✕ removes it. The wall
-lives in the URL — `#wall=kota-1,prov-1915` — so a reload or a shared link
-reopens the same cameras. Streams run only while the wall is open.
+the window. `M` goes back to the map, `⛶` (or `F`, or a double-click) makes one
+tile fullscreen, drag a tile onto another to swap places, and ✕ removes it. The
+wall lives in the URL — `#wall=kota-1,prov-1915` — so a reload or a shared link
+reopens the same cameras while the wall is open. Streams run only while the wall
+is open.
 
 ## Refresh the data
 

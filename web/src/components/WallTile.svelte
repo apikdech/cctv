@@ -74,6 +74,8 @@
   {/if}
 
   <span class="chip"><i class:live></i>{displayName(camera.title)}</span>
+  <button class="fs" type="button" aria-label={`Fullscreen ${displayName(camera.title)}`} title="Fullscreen" onclick={fullscreen}
+  >⛶</button>
   <button
     class="remove"
     type="button"
@@ -105,7 +107,7 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    max-width: calc(100% - 44px);
+    max-width: calc(100% - 76px);
     padding: 2px 7px;
     border-radius: 4px;
     background: rgba(0, 0, 0, 0.55);
@@ -152,11 +154,32 @@
     opacity: 0;
     transition: opacity 0.15s ease;
   }
+  .fs {
+    position: absolute;
+    top: 6px;
+    right: 38px;
+    width: 26px;
+    height: 26px;
+    border: 0;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .fs:hover,
+  .remove:hover {
+    background: rgba(0, 0, 0, 0.8);
+  }
   .tile:hover .remove,
   .remove:focus-visible {
     opacity: 1;
   }
-  .remove:hover {
-    background: rgba(0, 0, 0, 0.8);
+  /* No hover on touch: keep both controls reachable for a tap. */
+  @media (hover: none) {
+    .remove {
+      opacity: 1;
+    }
   }
 </style>

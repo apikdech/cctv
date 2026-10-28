@@ -122,3 +122,16 @@ it('double-click on a tile requests fullscreen', async () => {
   await fireEvent.doubleClick(container.querySelector('[data-tile="a"] .tile')!);
   expect(req).toHaveBeenCalled();
 });
+
+it('a tile has a fullscreen button', async () => {
+  const original = HTMLElement.prototype.requestFullscreen;
+  const req = vi.fn().mockResolvedValue(undefined);
+  HTMLElement.prototype.requestFullscreen = req;
+  try {
+    render(Wall, props());
+    await userEvent.click(screen.getByLabelText('Fullscreen Cam b'));
+    expect(req).toHaveBeenCalled();
+  } finally {
+    HTMLElement.prototype.requestFullscreen = original;
+  }
+});
