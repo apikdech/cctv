@@ -18,6 +18,34 @@ describe('search', () => {
     expect(searchCameras(cams, '  TUGU ').map(c => c.id)).toEqual(['kota-2']);
     expect(searchCameras(cams, '').length).toBe(2);
   });
+
+  it('splits camelCase for display and matching', () => {
+    expect(displayName('JogokariyanSelatan')).toBe('Jogokariyan Selatan');
+    const cams = [cam('prov-1', 'JogokariyanSelatan', { dataset: 'prov' })];
+    expect(searchCameras(cams, 'jogokariyan selatan').map(c => c.id)).toEqual(['prov-1']);
+  });
+
+  it('finds place names that only exist in the slug', () => {
+    const cams = [cam('prov-1281', 'ViewDepanMall', { dataset: 'prov', slug: 'depan-plazamall-malioboro' })];
+    expect(searchCameras(cams, 'malioboro').map(c => c.id)).toEqual(['prov-1281']);
+  });
+
+  it('matches agency names and expands dishub', () => {
+    const cams = [cam('prov-9', 'RingRoad', { dataset: 'prov', owner: 'Dinas Perhubungan DIY' })];
+    expect(searchCameras(cams, 'dishub').map(c => c.id)).toEqual(['prov-9']);
+    expect(searchCameras(cams, 'perhubungan').map(c => c.id)).toEqual(['prov-9']);
+  });
+
+  it('matches provinsi and kota as dataset words', () => {
+    const cams = [cam('kota-1', 'A'), cam('prov-2', 'B', { dataset: 'prov' })];
+    expect(searchCameras(cams, 'provinsi').map(c => c.id)).toEqual(['prov-2']);
+    expect(searchCameras(cams, 'kota').map(c => c.id)).toEqual(['kota-1']);
+  });
+
+  it('ranks title matches above place matches', () => {
+    const cams = [cam('prov-1', 'X', { dataset: 'prov', owner: 'Sleman' }), cam('prov-2', 'Sleman Ring Road', { dataset: 'prov', owner: 'Bantul' })];
+    expect(searchCameras(cams, 'sleman').map(c => c.id)).toEqual(['prov-2', 'prov-1']);
+  });
 });
 
 describe('visibleCameras', () => {
