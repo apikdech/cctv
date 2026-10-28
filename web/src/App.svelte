@@ -12,6 +12,7 @@
   import { visibleCameras } from './lib/search';
   import { SHEET, SIDEBAR, clampSheet, clampSidebar, loadSize, saveSize } from './lib/size';
   import { loadStatus } from './lib/status';
+  import { nextTarget, startTrip, stepBack, stepForward, tripKey, type Trip } from './lib/trip';
   import { loadThemeChoice, nextChoice, prefersDarkQuery, resolveTheme, saveThemeChoice } from './lib/theme';
   import { addToWall, removeFromWall, swapInWall } from './lib/wall';
   import type { Camera, LivenessMap, Toggles } from './lib/types';
@@ -27,6 +28,7 @@
   let group: string[] | null = $state(null);
   let wallIds: string[] = $state([]);
   let wallOpen = $state(false);
+  let trip: Trip | null = $state(null);
   let cache: LivenessCache = {};
   let themeChoice = $state(loadThemeChoice(storage()));
   let prefersDark = $state(false);
@@ -42,6 +44,7 @@
   const visible = $derived(visibleCameras(cameras, toggles, liveness, selectedId));
   const selected = $derived(cameras.find((c) => c.id === selectedId) ?? null);
   const nearby = $derived(selected ? nearest(visible, selected, 5) : []);
+  const next = $derived(selected && trip ? nextTarget(trip, visible, selected) : null);
   const groupCameras = $derived(group ? cameras.filter((c) => group!.includes(c.id)) : []);
   const wallCameras = $derived(wallIds.map((id) => cameras.find((c) => c.id === id)).filter((c): c is Camera => !!c));
 
@@ -99,11 +102,33 @@
     record([[id, status]]);
   }
 
-  function select(id: string) {
+  function open(id: string) {
     selectedId = id;
     group = null;
     hoveredId = null;
     history.replaceState(null, '', formatHash(id));
+  }
+
+  function select(id: string) {
+    trip = startTrip(id);
+    open(id);
+  }
+
+  function onkeydown(e: KeyboardEvent) {
+    if (!selected || !trip || wallOpen) return;
+    const key = tripKey(e);
+    const target = next;
+    if (key === 'next' && target) {
+      trip = stepForward(trip, target.id);
+      open(target.id);
+      e.preventDefault();
+    } else if (key === 'back') {
+      const previous = stepBack(trip);
+      if (!previous) return;
+      trip = previous;
+      open(previous.trail[previous.trail.length - 1]);
+      e.preventDefault();
+    }
   }
 
   function listUrl(): string {
@@ -111,6 +136,7 @@
   }
 
   function back() {
+    trip = null;
     selectedId = null;
     hoveredId = null;
     history.replaceState(null, '', listUrl());
@@ -204,7 +230,7 @@
   });
 </script>
 
-<svelte:window bind:innerWidth={viewportWidth} bind:innerHeight={viewportHeight} />
+<svelte:window bind:innerWidth={viewportWidth} bind:innerHeight={viewportHeight} {onkeydown} />
 
 <div
   class="app"
@@ -227,6 +253,8 @@
             onliveness={recordPlayback}
             wall={wallIds}
             onwall={toggleWall}
+            {next}
+            visited={trip?.visited ?? []}
           />
         {/if}
       {:else if group}
@@ -262,7 +290,16 @@
   </div>
 
   <div class="map" inert={wallOpen}>
-    <MapView cameras={visible} {liveness} {selected} {hoveredId} {theme} onselect={select} ongroup={showGroup} />
+    <MapView
+      cameras={visible}
+      {liveness}
+      {selected}
+      {hoveredId}
+      {theme}
+      keyboard={!selected}
+      onselect={select}
+      ongroup={showGroup}
+    />
     <div class="map-tools">
       {#if wallIds.length > 0 && !wallOpen}
         <button class="wall-open" type="button" onclick={openWall}>Wall ({wallIds.length})</button>

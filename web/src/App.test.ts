@@ -52,6 +52,7 @@ import App from './App.svelte';
 const cams = [
   { id: 'kota-1', ref: 1, dataset: 'kota', title: 'Simpang_A', url: 'u1', lat: -7.8, lon: 110.36, kecamatan: 'GONDOKUSUMAN', kelurahan: '', owner: '', slug: '', source: 'official', lastSeen: null },
   { id: 'kota-2', ref: 2, dataset: 'kota', title: 'Simpang_B', url: 'u2', lat: -7.81, lon: 110.37, kecamatan: 'GONDOKUSUMAN', kelurahan: '', owner: '', slug: '', source: 'official', lastSeen: null },
+  { id: 'kota-3', ref: 3, dataset: 'kota', title: 'Simpang_C', url: 'u3', lat: -7.83, lon: 110.39, kecamatan: 'GONDOKUSUMAN', kelurahan: '', owner: '', slug: '', source: 'official', lastSeen: null },
 ];
 
 beforeEach(() => {
@@ -125,6 +126,46 @@ it('restores a stored panel width, clamped to the window', async () => {
   await screen.findByText('Simpang A');
   expect((container.querySelector('.app') as HTMLElement).style.getPropertyValue('--panel-w')).toBe('704px');
   expect(localStorage.getItem('cctv-panel-width')).toBe('900');
+});
+
+it('arrow down walks outward, arrow up steps back', async () => {
+  render(App);
+  await userEvent.click(await screen.findByText('Simpang A'));
+  expect(location.hash).toBe('#cam=kota-1');
+  const nextRow = () => screen.getAllByRole('listitem')[0];
+  expect(within(nextRow()).getByText('Simpang B')).toBeInTheDocument();
+
+  await userEvent.keyboard('{ArrowDown}');
+  expect(location.hash).toBe('#cam=kota-2');
+  await userEvent.keyboard('{ArrowDown}');
+  expect(location.hash).toBe('#cam=kota-3');
+  await userEvent.keyboard('{ArrowUp}');
+  expect(location.hash).toBe('#cam=kota-2');
+  await userEvent.keyboard('{ArrowUp}');
+  expect(location.hash).toBe('#cam=kota-1');
+  await userEvent.keyboard('{ArrowUp}');
+  expect(location.hash).toBe('#cam=kota-1');
+});
+
+it('picking a camera starts a new trip', async () => {
+  render(App);
+  await userEvent.click(await screen.findByText('Simpang A'));
+  await userEvent.keyboard('{ArrowDown}');
+  expect(location.hash).toBe('#cam=kota-2');
+
+  const aside = document.querySelector('aside') as HTMLElement;
+  await userEvent.click(within(aside).getByRole('button', { name: /Simpang A/ }));
+  expect(location.hash).toBe('#cam=kota-1');
+
+  await userEvent.keyboard('{ArrowDown}');
+  expect(location.hash).toBe('#cam=kota-2');
+});
+
+it('leaves the arrow keys alone on the list', async () => {
+  render(App);
+  await screen.findByText('Simpang A');
+  await userEvent.keyboard('{ArrowDown}');
+  expect(location.hash).toBe('');
 });
 
 it('opening the wall tears down the single player underneath', async () => {

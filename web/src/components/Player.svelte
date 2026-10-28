@@ -17,10 +17,21 @@
     onliveness: (id: string, status: 'alive' | 'dead') => void;
     wall?: string[];
     onwall?: (id: string) => void;
+    next?: Camera | null;
+    visited?: string[];
   }
-  let { camera, nearby, liveness, onback, onselect, onhover, onliveness, wall, onwall }: Props = $props();
+  let { camera, nearby, liveness, onback, onselect, onhover, onliveness, wall, onwall, next, visited }: Props = $props();
 
   const wallFull = $derived((wall?.length ?? 0) >= MAX_WALL);
+  // The arrow-key target is pinned first so it is always visible, even when it
+  // is not among the closest cameras.
+  const rows = $derived(next ? [next, ...nearby.filter((c) => c.id !== next.id)] : nearby);
+
+  function tagFor(id: string): 'next' | 'visited' | undefined {
+    if (next?.id === id) return 'next';
+    if (visited?.includes(id)) return 'visited';
+    return undefined;
+  }
 
   let wrapper: HTMLDivElement;
   let video: HTMLVideoElement;
@@ -86,10 +97,10 @@
     {/if}
   </div>
 
-  {#if nearby.length}
+  {#if rows.length}
     <h3>Nearby</h3>
     <ul>
-      {#each nearby as cam (cam.id)}
+      {#each rows as cam (cam.id)}
         <li>
           <CameraRow
             camera={cam}
@@ -99,6 +110,7 @@
             inWall={wall?.includes(cam.id) ?? false}
             {wallFull}
             {onwall}
+            tag={tagFor(cam.id)}
           />
         </li>
       {/each}

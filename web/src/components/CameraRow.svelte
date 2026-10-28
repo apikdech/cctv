@@ -11,8 +11,9 @@
     inWall?: boolean;
     wallFull?: boolean;
     onwall?: (id: string) => void;
+    tag?: 'next' | 'visited';
   }
-  let { camera, liveness, onselect, onhover, inWall = false, wallFull = false, onwall }: Props = $props();
+  let { camera, liveness, onselect, onhover, inWall = false, wallFull = false, onwall, tag }: Props = $props();
 
   const kind = $derived(
     liveness === 'dead' ? 'dead' : camera.source === 'removed' ? 'removed' : camera.dataset,
@@ -25,7 +26,7 @@
   );
 </script>
 
-<div class="row">
+<div class="row" class:visited={tag === 'visited'}>
   <button
     class="main"
     type="button"
@@ -37,9 +38,10 @@
   >
     <span class="dot {kind}"></span>
     <span class="text">
-      <span class="name">{displayName(camera.title)}</span>
+      <span class="name">{displayName(camera.title)}{#if tag === 'next'}<span class="tag">Next ↓</span>{/if}</span>
       {#if place}<span class="sub">{place}</span>{/if}
       <span class="sub status">{status}</span>
+      {#if tag === 'visited'}<span class="sr-only"> (visited)</span>{/if}
     </span>
   </button>
 
@@ -93,6 +95,30 @@
   .name {
     font-weight: 600;
     font-size: 14px;
+  }
+  .tag {
+    margin-left: 6px;
+    padding: 1px 5px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--chip-text);
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .row.visited {
+    opacity: 0.55;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
   }
   .sub {
     font-size: 12px;

@@ -23,10 +23,11 @@
     selected: Camera | null;
     hoveredId: string | null;
     theme: Theme;
+    keyboard: boolean;
     onselect: (id: string) => void;
     ongroup: (ids: string[]) => void;
   }
-  let { cameras, liveness, selected, hoveredId, theme, onselect, ongroup }: Props = $props();
+  let { cameras, liveness, selected, hoveredId, theme, keyboard, onselect, ongroup }: Props = $props();
 
   const MAX_ZOOM = 19;
   // Category colours mirror the --kota/--prov/--removed/--dead variables in
@@ -204,6 +205,14 @@
       addLayers(map!, theme);
       ready = true;
     });
+  });
+
+  $effect(() => {
+    if (!ready) return;
+    // The arrow keys drive the camera trip while a camera is open, so the
+    // map's own arrow-key panning is off then.
+    if (keyboard) map!.keyboard.enable();
+    else map!.keyboard.disable();
   });
 
   $effect(() => {

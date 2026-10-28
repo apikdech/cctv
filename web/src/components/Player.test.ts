@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/svelte';
+import { render, screen, within } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 import { it, expect, vi, beforeEach } from 'vitest';
 
@@ -119,3 +119,25 @@ it('marks the playing camera as already on the wall', () => {
   render(Player, { ...props(), wall: ['kota-1'], onwall: vi.fn() });
   expect(screen.getByText('On wall')).toBeInTheDocument();
 });
+
+it('shows the next camera at the top of Nearby', () => {
+  render(Player, { ...props(), nearby: [cam('kota-2'), cam('kota-3')], next: cam('kota-9') });
+  const rows = screen.getAllByRole('listitem');
+  expect(rows).toHaveLength(3);
+  expect(within(rows[0]).getByText('Next ↓')).toBeInTheDocument();
+  expect(within(rows[0]).getByText('Cam kota-9')).toBeInTheDocument();
+});
+
+it('does not list the next camera twice', () => {
+  render(Player, { ...props(), nearby: [cam('kota-2'), cam('kota-3')], next: cam('kota-3') });
+  const rows = screen.getAllByRole('listitem');
+  expect(rows).toHaveLength(2);
+  expect(within(rows[0]).getByText('Cam kota-3')).toBeInTheDocument();
+  expect(screen.getAllByText('Cam kota-3')).toHaveLength(1);
+});
+
+it('marks cameras already visited on the trip', () => {
+  render(Player, { ...props(), nearby: [cam('kota-2'), cam('kota-3')], visited: ['kota-2'] });
+  expect(screen.getByRole('button', { name: /Cam kota-2.*visited/ })).toBeInTheDocument();
+});
+
