@@ -148,19 +148,21 @@
 </script>
 
 <div class="app">
-  <aside class="panel">
+  <aside class="panel" inert={wallOpen}>
     {#if selected}
-      <Player
-        camera={selected}
-        {nearby}
-        {liveness}
-        onback={back}
-        onselect={select}
-        onhover={(id) => (hoveredId = id)}
-        onliveness={recordPlayback}
-        wall={wallIds}
-        onwall={toggleWall}
-      />
+      {#if !wallOpen}
+        <Player
+          camera={selected}
+          {nearby}
+          {liveness}
+          onback={back}
+          onselect={select}
+          onhover={(id) => (hoveredId = id)}
+          onliveness={recordPlayback}
+          wall={wallIds}
+          onwall={toggleWall}
+        />
+      {/if}
     {:else if group}
       <CameraList
         cameras={groupCameras}
@@ -188,7 +190,7 @@
     {/if}
   </aside>
 
-  <div class="map">
+  <div class="map" inert={wallOpen}>
     <MapView cameras={visible} {liveness} {selected} {hoveredId} onselect={select} ongroup={showGroup} />
     {#if wallIds.length > 0 && !wallOpen}
       <button class="wall-open" type="button" onclick={openWall}>Wall ({wallIds.length})</button>
