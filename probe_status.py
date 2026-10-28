@@ -18,6 +18,7 @@ from urllib.request import Request, urlopen
 CAMERAS = Path("web/public/cameras.json")
 OUT = Path("status.json")
 CONCURRENCY = 3
+PROGRESS_EVERY = 50
 TIMEOUT = 10
 USER_AGENT = "cctv-jogja-map/1.0 (+https://github.com/apikdech/cctv)"
 
@@ -37,10 +38,17 @@ def _sort_key(cam: dict) -> tuple[str, int, str]:
     return (dataset, int(ref), "") if ref.isdigit() else ("", 0, dataset)
 
 
-def build_status(cameras: list[dict], probe_fn, generated_at: str) -> dict:
+def build_status(cameras: list[dict], probe_fn, generated_at: str, progress=None) -> dict:
     ordered = sorted(cameras, key=_sort_key)
+    total = len(ordered)
+    alive = 0
+    results = []
     with ThreadPoolExecutor(max_workers=CONCURRENCY) as pool:
-        results = list(pool.map(lambda c: bool(probe_fn(c["url"])), ordered))
+        for done, ok in enumerate(pool.map(lambda c: bool(probe_fn(c["url"])), ordered), start=1):
+            results.append(ok)
+            alive += ok
+            if progress and (done % PROGRESS_EVERY == 0 or done == total):
+                progress(f"{done}/{total} probed, {alive} alive")
     return {
         "generatedAt": generated_at,
         "cameras": {
@@ -62,7 +70,7 @@ def main() -> None:
     generated_at = (
         datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
     )
-    status = build_status(cameras, probe, generated_at)
+    status = build_status(cameras, probe, generated_at, progress=lambda line: print(line, flush=True))
     write_status(OUT, status)
     alive = sum(1 for value in status["cameras"].values() if value == "alive")
     print(f"{alive}/{len(cameras)} alive -> {OUT}")

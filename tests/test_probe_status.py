@@ -63,6 +63,17 @@ def test_build_status_marks_failures_dead():
     assert out["cameras"] == {"1": "alive", "2": "dead"}
 
 
+def test_build_status_reports_progress_every_fifty_cameras():
+    lines = []
+    build_status([cam(i) for i in range(120)], lambda url: True, "t", progress=lines.append)
+    assert lines == ["50/120 probed, 50 alive", "100/120 probed, 100 alive", "120/120 probed, 120 alive"]
+
+
+def test_build_status_stays_quiet_without_a_progress_callback(capsys):
+    build_status([cam(i) for i in range(60)], lambda url: True, "t")
+    assert capsys.readouterr().out == ""
+
+
 def test_build_status_never_runs_more_than_three_probes_at_once():
     import threading
     import time
