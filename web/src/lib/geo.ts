@@ -11,6 +11,17 @@ export function kindOf(cam: Camera, liveness: LivenessMap): Kind {
   return cam.source === 'removed' ? 'removed' : cam.dataset;
 }
 
+/**
+ * A cluster is tinted by its worst member. MapLibre cannot call JS per cluster,
+ * so the paint expression in MapView.svelte mirrors this rule — keep them in step.
+ */
+export function clusterKind(counts: { total: number; dead: number; removed: number; prov: number }): Kind {
+  if (counts.total > 0 && counts.dead === counts.total) return 'dead';
+  if (counts.removed > 0) return 'removed';
+  if (counts.prov > 0) return 'prov';
+  return 'kota';
+}
+
 export function toFeatureCollection(cams: Camera[], liveness: LivenessMap): CameraFeatureCollection {
   return {
     type: 'FeatureCollection',

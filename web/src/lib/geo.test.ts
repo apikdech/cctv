@@ -1,5 +1,5 @@
 import { it, expect } from 'vitest';
-import { kindOf, toFeatureCollection, nearest, distanceMeters } from './geo';
+import { kindOf, toFeatureCollection, nearest, distanceMeters, clusterKind } from './geo';
 import type { Camera } from './types';
 
 const cam = (id: string, lat: number, lon: number, source: Camera['source'] = 'official', dataset: Camera['dataset'] = 'kota'): Camera =>
@@ -26,4 +26,12 @@ it('nearest excludes the target and sorts by distance', () => {
   const t = cam('kota-1', -7.8, 110.37), far = cam('kota-2', -7.9, 110.37), near = cam('kota-3', -7.801, 110.37);
   expect(nearest([t, far, near], t, 5).map(c => c.id)).toEqual(['kota-3', 'kota-2']);
   expect(Math.round(distanceMeters(t, near))).toBe(111);
+});
+
+it('colours a cluster by its worst member', () => {
+  expect(clusterKind({ total: 3, dead: 3, removed: 0, prov: 0 })).toBe('dead');
+  expect(clusterKind({ total: 4, dead: 1, removed: 2, prov: 1 })).toBe('removed');
+  expect(clusterKind({ total: 4, dead: 0, removed: 0, prov: 4 })).toBe('prov');
+  expect(clusterKind({ total: 4, dead: 0, removed: 0, prov: 0 })).toBe('kota');
+  expect(clusterKind({ total: 4, dead: 1, removed: 0, prov: 1 })).toBe('prov');
 });

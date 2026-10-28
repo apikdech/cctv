@@ -28,7 +28,7 @@
 
   const STYLE = 'https://tiles.openfreemap.org/styles/liberty';
   const MAX_ZOOM = 19;
-  const COLOR = { official: '#2563eb', removed: '#ea580c', dead: '#9ca3af', ring: '#111827' };
+  const COLOR = { kota: '#2563eb', prov: '#0d9488', removed: '#ea580c', dead: '#9ca3af', ring: '#111827' };
 
   let container: HTMLDivElement;
   let map: MapLibre | undefined;
@@ -56,6 +56,7 @@
       clusterMaxZoom: MAX_ZOOM,
       clusterProperties: {
         removed: ['+', ['case', ['==', ['get', 'kind'], 'removed'], 1, 0]],
+        prov: ['+', ['case', ['==', ['get', 'kind'], 'prov'], 1, 0]],
         dead: ['+', ['case', ['==', ['get', 'kind'], 'dead'], 1, 0]],
       },
     });
@@ -67,11 +68,13 @@
       source: 'cameras',
       filter: ['has', 'point_count'],
       paint: {
+        // Mirrors clusterKind() in lib/geo.ts: all dead, then any removed, then any province.
         'circle-color': [
           'case',
           ['==', ['get', 'dead'], ['get', 'point_count']], COLOR.dead,
           ['>', ['get', 'removed'], 0], COLOR.removed,
-          COLOR.official,
+          ['>', ['get', 'prov'], 0], COLOR.prov,
+          COLOR.kota,
         ],
         'circle-radius': ['step', ['get', 'point_count'], 15, 10, 19, 30, 24],
         'circle-stroke-width': 2,
@@ -97,7 +100,7 @@
       source: 'cameras',
       filter: ['!', ['has', 'point_count']],
       paint: {
-        'circle-color': ['match', ['get', 'kind'], 'removed', COLOR.removed, 'dead', COLOR.dead, COLOR.official],
+        'circle-color': ['match', ['get', 'kind'], 'removed', COLOR.removed, 'dead', COLOR.dead, 'prov', COLOR.prov, COLOR.kota],
         'circle-radius': 7,
         'circle-stroke-width': 2,
         'circle-stroke-color': '#fff',

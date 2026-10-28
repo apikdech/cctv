@@ -94,7 +94,8 @@
   }
   .toggles {
     display: flex;
-    gap: 14px;
+    flex-wrap: wrap;
+    gap: 6px 14px;
     font-size: 13px;
   }
   .toggles label {
