@@ -22,7 +22,7 @@ probe_status.py ──► status.json ──► status branch ──► raw.gith
 2. Build settings:
    - Framework preset: **None**
    - Root directory: `web`
-   - Build command: `npm run build`
+   - Build command: `pnpm build`
    - Build output directory: `dist`
    - Node version: from `web/.nvmrc` (26). If the build image rejects it, set
      `NODE_VERSION=24` under **Settings → Environment variables**.

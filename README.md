@@ -12,8 +12,8 @@ in the panel. Colours: **blue** official, **orange** removed, **grey** dead.
 ```bash
 cd web
 nvm use
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 Link straight to a camera with `#cam=<id>`, e.g. `http://localhost:5173/#cam=14`.
@@ -33,7 +33,7 @@ uv run python build_cameras.py   # merge       -> web/public/cameras.json
 
 ```bash
 uv run --with pytest pytest tests -q   # data merge
-cd web && npm test && npm run check    # app
+cd web && pnpm test && pnpm check   # app
 ```
 
 ## Be gentle
