@@ -1,0 +1,53 @@
+import { render, screen } from '@testing-library/svelte';
+import userEvent from '@testing-library/user-event';
+import { it, expect, vi, beforeEach } from 'vitest';
+
+const instances: any[] = [];
+vi.mock('hls.js', () => {
+  class FakeHls {
+    static Events = { MANIFEST_PARSED: 'manifestParsed', ERROR: 'hlsError' };
+    static isSupported = () => true;
+    handlers: Record<string, Function> = {}; destroyed = false;
+    constructor() { instances.push(this); }
+    on(ev: string, cb: Function) { this.handlers[ev] = cb; }
+    loadSource() {} attachMedia() {}
+    destroy() { this.destroyed = true; }
+    emit(ev: string, data?: unknown) { this.handlers[ev]?.(ev, data); }
+  }
+  return { default: FakeHls };
+});
+import Player from './Player.svelte';
+import type { Camera } from '../lib/types';
+
+const cam = (id: number): Camera => ({ id, title: `Cam_${id}`, url: `u${id}`, lat: 0, lon: 0, kecamatan: '', kelurahan: '', source: 'removed', lastSeen: '2025-09-01' });
+const props = () => ({ camera: cam(1), nearby: [], liveness: {}, onback: vi.fn(), onselect: vi.fn(), onhover: vi.fn(), onliveness: vi.fn() });
+beforeEach(() => { instances.length = 0; HTMLMediaElement.prototype.play = vi.fn().mockResolvedValue(undefined); });
+
+it('reports alive on manifest, dead + message on fatal error', async () => {
+  const p = props();
+  render(Player, p);
+  instances[0].emit('manifestParsed');
+  expect(p.onliveness).toHaveBeenCalledWith(1, 'alive');
+  instances[0].emit('hlsError', { fatal: true });
+  expect(p.onliveness).toHaveBeenCalledWith(1, 'dead');
+  expect(await screen.findByText("This camera isn't streaming right now")).toBeInTheDocument();
+  expect(screen.getByText('Removed · last seen 2025-09-01')).toBeInTheDocument();
+});
+
+it('ignores events from a previous camera', async () => {
+  const p = props();
+  const { rerender } = render(Player, p);
+  await rerender({ ...p, camera: cam(2) });
+  expect(instances[0].destroyed).toBe(true);
+  instances[0].emit('hlsError', { fatal: true });
+  expect(p.onliveness).not.toHaveBeenCalled();
+  expect(screen.queryByText("This camera isn't streaming right now")).toBeNull();
+});
+
+it('fullscreen button requests fullscreen', async () => {
+  const req = vi.fn().mockResolvedValue(undefined);
+  HTMLElement.prototype.requestFullscreen = req;
+  render(Player, props());
+  await userEvent.click(screen.getByLabelText('Fullscreen'));
+  expect(req).toHaveBeenCalled();
+});
