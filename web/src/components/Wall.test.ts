@@ -60,6 +60,13 @@ it('grid follows the count', () => {
   expect(screen.getByTestId('grid').style.getPropertyValue('--rows')).toBe('2');
 });
 
+it('shows connecting in each tile until it plays', async () => {
+  const { container } = render(Wall, props());
+  expect(screen.getAllByText('Connecting…')).toHaveLength(3);
+  container.querySelectorAll('video')[0].dispatchEvent(new Event('playing'));
+  await vi.waitFor(() => expect(screen.getAllByText('Connecting…')).toHaveLength(2));
+});
+
 it('remove button reports the id', async () => {
   const p = props();
   render(Wall, p);

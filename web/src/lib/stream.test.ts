@@ -7,7 +7,9 @@ vi.mock('hls.js', () => {
     static isSupported = vi.fn(() => true);
     handlers: Record<string, Function> = {};
     destroyed = false;
-    constructor() {
+    config?: Record<string, unknown>;
+    constructor(config?: Record<string, unknown>) {
+      this.config = config;
       instances.push(this);
     }
     on(ev: string, cb: Function) {
@@ -45,6 +47,11 @@ it('reports alive on manifest and dead on a fatal error', () => {
   instances[0].emit('manifestParsed');
   instances[0].emit('hlsError', { fatal: true });
   expect(seen).toEqual(['alive', 'dead']);
+});
+
+it('starts two target durations behind live', () => {
+  attachStream(video, 'u1', () => {});
+  expect(instances[0].config).toMatchObject({ liveSyncDurationCount: 2 });
 });
 
 it('ignores a non-fatal hls error', () => {

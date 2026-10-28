@@ -34,6 +34,13 @@ it('reports alive on manifest, dead + message on fatal error', async () => {
   expect(screen.getByText('Kota · Removed · last seen 2025-09-01')).toBeInTheDocument();
 });
 
+it('shows connecting until the video plays', async () => {
+  const { container } = render(Player, props());
+  expect(screen.getByText('Connecting…')).toBeInTheDocument();
+  container.querySelector('video')!.dispatchEvent(new Event('playing'));
+  await vi.waitFor(() => expect(screen.queryByText('Connecting…')).toBeNull());
+});
+
 it('names the dataset and agency for a province camera', () => {
   const province = { ...cam('prov-5'), dataset: 'prov' as const, source: 'official' as const, lastSeen: null, owner: 'Dinas Perhubungan DIY' };
   render(Player, { ...props(), camera: province });

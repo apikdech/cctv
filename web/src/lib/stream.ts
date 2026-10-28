@@ -30,7 +30,7 @@ export function attachStream(
   };
 
   if (Hls.isSupported()) {
-    const hls = new Hls();
+    const hls = new Hls({ liveSyncDurationCount: 2 });
     hls.on(Hls.Events.MANIFEST_PARSED, () => {
       play();
       report('alive');

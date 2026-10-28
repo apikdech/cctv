@@ -25,6 +25,7 @@
   let wrapper: HTMLDivElement;
   let video: HTMLVideoElement;
   let failed = $state(false);
+  let loading = $state(true);
 
   const place = $derived([camera.kecamatan, camera.kelurahan].filter(Boolean).join(' · '));
   const source = $derived(
@@ -39,6 +40,7 @@
     const id = camera.id;
     const url = camera.url;
     failed = false;
+    loading = true;
 
     return attachStream(video, url, (status) => {
       if (status === 'unsupported') failed = true;
@@ -64,9 +66,11 @@
   <button class="back" type="button" onclick={onback}>← back to list</button>
 
   <div class="video" bind:this={wrapper}>
-    <video bind:this={video} muted autoplay playsinline ondblclick={fullscreen}></video>
+    <video bind:this={video} muted autoplay playsinline ondblclick={fullscreen} onplaying={() => (loading = false)}></video>
     {#if failed}
       <p class="error">This camera isn't streaming right now</p>
+    {:else if loading}
+      <p class="loading" role="status">Connecting…</p>
     {/if}
     <button class="fs" type="button" aria-label="Fullscreen" title="Fullscreen (F)" onclick={fullscreen}>⛶</button>
   </div>
@@ -142,6 +146,25 @@
     text-align: center;
     color: #e5e7eb;
     font-size: 14px;
+  }
+  .loading {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    color: #9ca3af;
+    font-size: 13px;
+    pointer-events: none;
+    animation: fade-in 0.2s ease 0.35s both;
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
   .fs {
     position: absolute;

@@ -14,6 +14,7 @@
   let wrapper: HTMLDivElement;
   let video: HTMLVideoElement;
   let failed = $state(false);
+  let loading = $state(true);
   let live = $state(false);
   let hovered = $state(false);
 
@@ -30,6 +31,7 @@
     detach?.();
     currentId = id;
     failed = false;
+    loading = true;
     live = false;
 
     detach = attachStream(video, url, (status) => {
@@ -67,10 +69,12 @@
   onmouseenter={() => (hovered = true)}
   onmouseleave={() => (hovered = false)}
 >
-  <video bind:this={video} muted autoplay playsinline></video>
+  <video bind:this={video} muted autoplay playsinline onplaying={() => (loading = false)}></video>
 
   {#if failed}
     <p class="error">This camera isn't streaming right now</p>
+  {:else if loading}
+    <p class="loading">Connecting…</p>
   {/if}
 
   <span class="chip"><i class:live></i>{displayName(camera.title)}</span>
@@ -137,6 +141,25 @@
     text-align: center;
     color: #e5e7eb;
     font-size: 13px;
+  }
+  .loading {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    color: #9ca3af;
+    font-size: 12px;
+    pointer-events: none;
+    animation: fade-in 0.2s ease 0.35s both;
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
   .remove {
     position: absolute;
