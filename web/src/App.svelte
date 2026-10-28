@@ -3,12 +3,14 @@
   import CameraList from './components/CameraList.svelte';
   import MapView from './components/MapView.svelte';
   import Player from './components/Player.svelte';
+  import ThemeButton from './components/ThemeButton.svelte';
   import Wall from './components/Wall.svelte';
   import { nearest } from './lib/geo';
   import { formatHash, formatWallHash, resolveHashCamera, resolveWallHash } from './lib/hash';
   import { applyResults, checkAll, loadCache, probe, saveCache, type LivenessCache } from './lib/liveness';
   import { visibleCameras } from './lib/search';
   import { loadStatus } from './lib/status';
+  import { loadThemeChoice, nextChoice, prefersDarkQuery, resolveTheme, saveThemeChoice } from './lib/theme';
   import { addToWall, removeFromWall, swapInWall } from './lib/wall';
   import type { Camera, LivenessMap, Toggles } from './lib/types';
 
@@ -24,14 +26,27 @@
   let wallIds: string[] = $state([]);
   let wallOpen = $state(false);
   let cache: LivenessCache = {};
+  let themeChoice = $state(loadThemeChoice(storage()));
+  let prefersDark = $state(false);
   // Actual playback beats a background probe that finishes later.
   const playerResolved = new Set<string>();
+
+  const theme = $derived(resolveTheme(themeChoice, prefersDark));
 
   const visible = $derived(visibleCameras(cameras, toggles, liveness, selectedId));
   const selected = $derived(cameras.find((c) => c.id === selectedId) ?? null);
   const nearby = $derived(selected ? nearest(visible, selected, 5) : []);
   const groupCameras = $derived(group ? cameras.filter((c) => group!.includes(c.id)) : []);
   const wallCameras = $derived(wallIds.map((id) => cameras.find((c) => c.id === id)).filter((c): c is Camera => !!c));
+
+  function cycleTheme() {
+    themeChoice = nextChoice(themeChoice);
+    saveThemeChoice(storage(), themeChoice);
+  }
+
+  $effect(() => {
+    document.documentElement.dataset.theme = theme;
+  });
 
   function storage(): Storage | null {
     try {
@@ -143,6 +158,16 @@
       await checkStreams();
     })();
     window.addEventListener('hashchange', syncFromHash);
+    const media = prefersDarkQuery();
+    if (media) {
+      prefersDark = media.matches;
+      const onchange = (e: MediaQueryListEvent) => (prefersDark = e.matches);
+      media.addEventListener('change', onchange);
+      return () => {
+        window.removeEventListener('hashchange', syncFromHash);
+        media.removeEventListener('change', onchange);
+      };
+    }
     return () => window.removeEventListener('hashchange', syncFromHash);
   });
 </script>
@@ -192,9 +217,12 @@
 
   <div class="map" inert={wallOpen}>
     <MapView cameras={visible} {liveness} {selected} {hoveredId} onselect={select} ongroup={showGroup} />
-    {#if wallIds.length > 0 && !wallOpen}
-      <button class="wall-open" type="button" onclick={openWall}>Wall ({wallIds.length})</button>
-    {/if}
+    <div class="map-tools">
+      {#if wallIds.length > 0 && !wallOpen}
+        <button class="wall-open" type="button" onclick={openWall}>Wall ({wallIds.length})</button>
+      {/if}
+      <ThemeButton choice={themeChoice} onclick={cycleTheme} />
+    </div>
   </div>
 
   {#if wallOpen}
@@ -224,9 +252,6 @@
     min-height: 0;
   }
   .wall-open {
-    position: absolute;
-    top: 12px;
-    right: 12px;
     padding: 6px 12px;
     border: 0;
     border-radius: 6px;
@@ -239,6 +264,14 @@
   }
   .wall-open:hover {
     background: var(--chip-hover);
+  }
+  .map-tools {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
   @media (max-width: 640px) {
     .app {

@@ -57,6 +57,7 @@ const cams = [
 beforeEach(() => {
   history.replaceState(null, '', '/');
   localStorage.clear();
+  delete document.documentElement.dataset.theme;
   HTMLMediaElement.prototype.play = vi.fn().mockResolvedValue(undefined);
   vi.stubGlobal('fetch', vi.fn(async (input: RequestInfo | URL) => {
     const url = String(input);
@@ -92,6 +93,30 @@ it('leaving the wall clears the wall from the URL', async () => {
   await userEvent.keyboard('m');
   expect(screen.queryByTestId('grid')).toBeNull();
   expect(location.hash).toBe('#cam=kota-1');
+});
+
+it('theme button cycles System → Light → Dark and applies it', async () => {
+  render(App);
+  await screen.findByText('Simpang A');
+
+  const button = () => screen.getByRole('button', { name: /^Theme: / });
+  expect(button()).toHaveAccessibleName('Theme: System');
+  expect(document.documentElement.dataset.theme).toBe('light');
+
+  await userEvent.click(button());
+  expect(button()).toHaveAccessibleName('Theme: Light');
+  expect(localStorage.getItem('cctv-theme')).toBe('light');
+  expect(document.documentElement.dataset.theme).toBe('light');
+
+  await userEvent.click(button());
+  expect(button()).toHaveAccessibleName('Theme: Dark');
+  expect(localStorage.getItem('cctv-theme')).toBe('dark');
+  expect(document.documentElement.dataset.theme).toBe('dark');
+
+  await userEvent.click(button());
+  expect(button()).toHaveAccessibleName('Theme: System');
+  expect(localStorage.getItem('cctv-theme')).toBeNull();
+  expect(document.documentElement.dataset.theme).toBe('light');
 });
 
 it('opening the wall tears down the single player underneath', async () => {
