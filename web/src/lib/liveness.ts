@@ -1,4 +1,4 @@
-import type { Camera } from './types';
+import type { Camera, LivenessMap } from './types';
 
 export type FetchFn = (url: string, init?: RequestInit) => Promise<Response>;
 type Status = 'alive' | 'dead';
@@ -15,7 +15,7 @@ export async function probe(url: string, fetchFn: FetchFn = fetch, timeoutMs = 1
   });
   const check = (async (): Promise<Status> => {
     try {
-      const res = await fetchFn(url, { signal: AbortSignal.timeout(timeoutMs) });
+      const res = await fetchFn(url, { cache: 'no-store', signal: AbortSignal.timeout(timeoutMs) });
       return res.ok && (await res.text()).length > 0 ? 'alive' : 'dead';
     } catch {
       return 'dead';
@@ -42,6 +42,23 @@ export async function checkAll(
 }
 
 export type LivenessCache = Record<number, { status: Status; at: number }>;
+
+/** Applies results to copies of both maps. Ids in `skip` keep their current value. */
+export function applyResults(
+  liveness: LivenessMap,
+  cache: LivenessCache,
+  results: [number, Status][],
+  now: number,
+  skip: ReadonlySet<number> = new Set(),
+): { liveness: LivenessMap; cache: LivenessCache } {
+  const next = { liveness: { ...liveness }, cache: { ...cache } };
+  for (const [id, status] of results) {
+    if (skip.has(id)) continue;
+    next.liveness[id] = status;
+    next.cache[id] = { status, at: now };
+  }
+  return next;
+}
 
 export function loadCache(storage: Storage | null, now: number): LivenessCache {
   try {

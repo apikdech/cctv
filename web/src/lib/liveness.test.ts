@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { probe, checkAll, loadCache, saveCache } from './liveness';
+import { probe, checkAll, loadCache, saveCache, applyResults } from './liveness';
 
 const res = (status: number, body: string) => Promise.resolve(new Response(body, { status }));
 
@@ -12,6 +12,19 @@ describe('probe', () => {
   });
   it('times out as dead', async () => {
     expect(await probe('u', () => new Promise(() => {}), 30)).toBe('dead');
+  });
+  it('bypasses the HTTP cache', async () => {
+    let init: RequestInit | undefined;
+    await probe('u', (_url, i) => { init = i; return res(200, '#EXTM3U'); });
+    expect(init?.cache).toBe('no-store');
+  });
+});
+
+describe('applyResults', () => {
+  it('ignores probe results for cameras the player already resolved', () => {
+    const out = applyResults({ 1: 'alive' }, { 1: { status: 'alive', at: 5 } }, [[1, 'dead'], [2, 'dead']], 100, new Set([1]));
+    expect(out.liveness).toEqual({ 1: 'alive', 2: 'dead' });
+    expect(out.cache).toEqual({ 1: { status: 'alive', at: 5 }, 2: { status: 'dead', at: 100 } });
   });
 });
 

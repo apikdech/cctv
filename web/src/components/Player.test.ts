@@ -44,6 +44,35 @@ it('ignores events from a previous camera', async () => {
   expect(screen.queryByText("This camera isn't streaming right now")).toBeNull();
 });
 
+it('reports dead when the video never starts playing', async () => {
+  vi.useFakeTimers();
+  try {
+    const p = props();
+    render(Player, p);
+    instances[0].emit('manifestParsed');
+    await vi.advanceTimersByTimeAsync(15_000);
+    expect(p.onliveness).toHaveBeenLastCalledWith(1, 'dead');
+    expect(screen.getByText("This camera isn't streaming right now")).toBeInTheDocument();
+  } finally {
+    vi.useRealTimers();
+  }
+});
+
+it('does not time out once the video is playing', async () => {
+  vi.useFakeTimers();
+  try {
+    const p = props();
+    const { container } = render(Player, p);
+    instances[0].emit('manifestParsed');
+    container.querySelector('video')!.dispatchEvent(new Event('playing'));
+    await vi.advanceTimersByTimeAsync(15_000);
+    expect(p.onliveness).not.toHaveBeenCalledWith(1, 'dead');
+    expect(screen.queryByText("This camera isn't streaming right now")).toBeNull();
+  } finally {
+    vi.useRealTimers();
+  }
+});
+
 it('fullscreen button requests fullscreen', async () => {
   const req = vi.fn().mockResolvedValue(undefined);
   HTMLElement.prototype.requestFullscreen = req;

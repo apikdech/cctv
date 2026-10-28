@@ -15,6 +15,8 @@
   }
   let { camera, nearby, liveness, onback, onselect, onhover, onliveness }: Props = $props();
 
+  const STALL_MS = 15_000;
+
   let wrapper: HTMLDivElement;
   let video: HTMLVideoElement;
   let failed = $state(false);
@@ -36,6 +38,16 @@
     };
     const play = () => video.play().catch(() => {});
 
+    // A stream can serve a playlist yet never deliver frames; don't leave a black box.
+    const stall = setTimeout(() => report('dead'), STALL_MS);
+    const playing = () => clearTimeout(stall);
+    video.addEventListener('playing', playing);
+    const stop = () => {
+      active = false;
+      clearTimeout(stall);
+      video.removeEventListener('playing', playing);
+    };
+
     if (Hls.isSupported()) {
       const hls = new Hls();
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -48,7 +60,7 @@
       hls.loadSource(url);
       hls.attachMedia(video);
       return () => {
-        active = false;
+        stop();
         hls.destroy();
       };
     }
@@ -61,7 +73,7 @@
       video.src = url;
       play();
       return () => {
-        active = false;
+        stop();
         video.removeEventListener('loadeddata', ok);
         video.removeEventListener('error', bad);
         video.removeAttribute('src');
@@ -70,10 +82,9 @@
     }
 
     // This browser can't play HLS at all; that says nothing about the camera.
+    stop();
     failed = true;
-    return () => {
-      active = false;
-    };
+    return stop;
   });
 
   function fullscreen() {
