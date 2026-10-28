@@ -83,6 +83,13 @@ def _province(rec: dict) -> dict | None:
     }
 
 
+def load_province(path: Path) -> list[dict]:
+    """A missing crawl must stop the build: writing a city-only map would silently drop 542 cameras."""
+    if not path.exists():
+        raise FileNotFoundError(f"{path} is missing — run `uv run python crawl_jogjaprov.py` first")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
 def merge(live: list[dict], snapshots: list[tuple[str, list[dict]]], province: list[dict]) -> list[dict]:
     cams: dict[int, dict] = {}
     for ts, records in sorted(snapshots, key=lambda s: s[0]):
@@ -110,7 +117,7 @@ def main() -> None:
         (p.stem.split("_", 1)[1], json.loads(p.read_text(encoding="utf-8")))
         for p in sorted(WAYBACK.glob("getdata_*.json"))
     ]
-    province = json.loads(PROVINCE.read_text(encoding="utf-8")) if PROVINCE.exists() else []
+    province = load_province(PROVINCE)
     cams = merge(live, snapshots, province)
 
     OUT.parent.mkdir(parents=True, exist_ok=True)

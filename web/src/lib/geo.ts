@@ -1,15 +1,11 @@
 import type { FeatureCollection, Point } from 'geojson';
-import { displayName, livenessOf } from './search';
-import type { Camera, LivenessMap } from './types';
+import { displayName, kindOf } from './search';
+import type { Camera, Kind, LivenessMap } from './types';
 
-export type Kind = 'kota' | 'prov' | 'removed' | 'dead';
+export { kindOf };
+export type { Kind };
 
 export type CameraFeatureCollection = FeatureCollection<Point, { id: string; title: string; kind: Kind }>;
-
-export function kindOf(cam: Camera, liveness: LivenessMap): Kind {
-  if (livenessOf(liveness, cam.id) === 'dead') return 'dead';
-  return cam.source === 'removed' ? 'removed' : cam.dataset;
-}
 
 /**
  * A cluster is tinted by its worst member. MapLibre cannot call JS per cluster,

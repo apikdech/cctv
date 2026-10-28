@@ -1,4 +1,6 @@
-from build_cameras import merge
+import pytest
+
+from build_cameras import load_province, merge
 
 
 def rec(i, title="Cam", lat="-7.80", lon="110.37", link="https://x/a.m3u8", kec="JETIS"):
@@ -51,3 +53,8 @@ def test_keeps_a_city_and_province_camera_at_the_same_spot():
 def test_sorts_city_before_province_then_by_ref():
     out = merge([rec(10), rec(2)], [], [prov(9), prov(100)])
     assert [c["id"] for c in out] == ["kota-2", "kota-10", "prov-9", "prov-100"]
+
+
+def test_missing_province_file_is_an_error(tmp_path):
+    with pytest.raises(FileNotFoundError, match="crawl_jogjaprov"):
+        load_province(tmp_path / "nope.json")

@@ -19,6 +19,9 @@ export interface Camera {
 
 export type Liveness = 'checking' | 'alive' | 'dead';
 
+/** What a camera (or a cluster of them) is drawn as. */
+export type Kind = 'kota' | 'prov' | 'removed' | 'dead';
+
 /** Missing id means `'checking'`. */
 export type LivenessMap = Record<string, Liveness>;
 

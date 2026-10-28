@@ -2,7 +2,7 @@
 """Probe every camera stream and write `status.json` for the `status` branch.
 
 The site fetches that file from raw.githubusercontent.com instead of probing
-all ~170 streams from every visitor's browser. Run it from a VPS cron; see
+all ~714 streams from every visitor's browser. Run it from a VPS cron; see
 docs/deploy.md.
 
     uv run python probe_status.py

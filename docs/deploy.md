@@ -40,7 +40,7 @@ The `status` branch is an orphan branch holding a single `status.json` at its
 root. It is machine-owned; do not merge it into `main`.
 
 ```json
-{"generatedAt":"2026-10-28T06:00:00Z","cameras":{"14":"alive","207":"dead"}}
+{"generatedAt":"2026-10-28T06:00:00Z","cameras":{"kota-14":"alive","prov-207":"dead"}}
 ```
 
 The app fetches
@@ -62,17 +62,23 @@ ssh-keygen -t ed25519 -N "" -C "cctv-status-cron" -f ~/.ssh/cctv-status
 Then, every 15 minutes:
 
 ```cron
-*/15 * * * * cd /srv/cctv && git pull -q --ff-only && uv run python probe_status.py && cp status.json /srv/cctv-status/status.json && cd /srv/cctv-status && git add status.json && git commit -qm "status $(date -u +%FT%TZ)" ; git push -q
+*/15 * * * * flock -n /tmp/cctv-probe.lock sh -c 'cd /srv/cctv && git pull -q --ff-only && uv run python probe_status.py && cp status.json /srv/cctv-status/status.json && cd /srv/cctv-status && git add status.json && git commit -qm "status $(date -u +%FT%TZ)" ; git push -q'
 ```
 
 A run with no changes exits non-zero at `git commit`; that is expected. The
 script probes three streams at a time with a plain `User-Agent`, and writes the
 file atomically so a killed run cannot publish a half-written one.
 
+`flock -n` is not decoration: worst case (every stream hanging until the 10s
+timeout) a 714-camera sweep takes ~40 minutes, longer than the 15-minute
+interval. Without the lock, cron would start a second sweep on top of the first
+and double the request rate.
+
 ## How the site behaves
 
 - On load it merges the status file over the 10-minute localStorage cache and
-  only probes from the browser for cameras the file does not cover.
+  only probes from the browser for cameras the file does not cover — up to all
+  714 if the file is stale, which is the old behaviour at four times the size.
 - A file that is missing, malformed, or older than 30 minutes (twice the cron
   interval) is ignored, and the browser probes as before. So a dead VPS
   degrades to today's behaviour rather than showing stale status.
@@ -90,7 +96,8 @@ curl -sI https://cctv-jogja.pages.dev | head -5
 - Pages Free: 500 builds/month, one at a time. Only `main` builds.
 - Each sweep is ~714 requests, to the city **and** province servers: 172 city
   cameras plus 542 mappable province cameras. Keeping concurrency at 3–4 holds
-  the request *rate* unchanged; the sweep just takes longer (a minute or two).
+  the request *rate* unchanged; the sweep just takes longer (a minute or two,
+  ~40 minutes if every stream times out).
   Keep the interval at 15 minutes or longer.
 - All probe traffic comes from one IP; if either source starts refusing it,
   lengthen the interval rather than raising concurrency.

@@ -51,8 +51,8 @@ describe('search', () => {
 describe('visibleCameras', () => {
   const cams = [cam('kota-1', 'a'), cam('prov-2', 'b', { dataset: 'prov' }), cam('kota-3', 'c', { source: 'removed' })];
 
-  it('hides a dataset when its toggle is off', () => {
-    expect(visibleCameras(cams, { ...all, kota: false }, {}, null).map(c => c.id)).toEqual(['prov-2']);
+  it('hides a dataset when its toggle is off, leaving removed cameras alone', () => {
+    expect(visibleCameras(cams, { ...all, kota: false }, {}, null).map(c => c.id)).toEqual(['prov-2', 'kota-3']);
     expect(visibleCameras(cams, { ...all, prov: false }, {}, null).map(c => c.id)).toEqual(['kota-1', 'kota-3']);
   });
 
@@ -64,5 +64,13 @@ describe('visibleCameras', () => {
     const live = { 'prov-2': 'dead' } as const;
     expect(visibleCameras(cams, { ...all, dead: false }, live, null).map(c => c.id)).toEqual(['kota-1', 'kota-3']);
     expect(visibleCameras(cams, { ...all, dead: false }, live, 'prov-2').map(c => c.id)).toEqual(['kota-1', 'prov-2', 'kota-3']);
+  });
+
+  it('keeps a dead city camera under the Dead toggle when Kota is off', () => {
+    expect(visibleCameras(cams, { ...all, kota: false }, { 'kota-1': 'dead' }, null).map(c => c.id)).toEqual(['kota-1', 'prov-2', 'kota-3']);
+  });
+
+  it('keeps the selected camera visible even when its dataset is off', () => {
+    expect(visibleCameras(cams, { ...all, prov: false }, {}, 'prov-2').map(c => c.id)).toEqual(['kota-1', 'prov-2', 'kota-3']);
   });
 });
