@@ -8,8 +8,8 @@
     liveness: LivenessMap;
     toggles: Toggles;
     ontoggle: (t: Toggles) => void;
-    onselect: (id: number) => void;
-    onhover: (id: number | null) => void;
+    onselect: (id: string) => void;
+    onhover: (id: string | null) => void;
     title?: string;
     onback?: () => void;
   }
@@ -19,7 +19,8 @@
   const shown = $derived(title ? cameras : searchCameras(cameras, query));
 
   const groups = [
-    { key: 'official', label: 'Official' },
+    { key: 'kota', label: 'Kota' },
+    { key: 'prov', label: 'Provinsi' },
     { key: 'removed', label: 'Removed' },
     { key: 'dead', label: 'Dead' },
   ] as const;
@@ -31,7 +32,7 @@
       {#if onback}<button class="back" type="button" onclick={onback}>← back to list</button>{/if}
       <h2>{title}</h2>
     {:else}
-      <input class="search" type="search" placeholder="Search camera…" bind:value={query} />
+      <input class="search" type="search" placeholder="Search camera, place, agency…" bind:value={query} />
       <p class="count">{shown.length} cameras</p>
     {/if}
     <div class="toggles">
@@ -107,8 +108,11 @@
     height: 10px;
     border-radius: 50%;
   }
-  .swatch.official {
+  .swatch.kota {
     background: #2563eb;
+  }
+  .swatch.prov {
+    background: #0d9488;
   }
   .swatch.removed {
     background: #ea580c;

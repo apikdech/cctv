@@ -20,9 +20,9 @@
     cameras: Camera[];
     liveness: LivenessMap;
     selected: Camera | null;
-    hoveredId: number | null;
-    onselect: (id: number) => void;
-    ongroup: (ids: number[]) => void;
+    hoveredId: string | null;
+    onselect: (id: string) => void;
+    ongroup: (ids: string[]) => void;
   }
   let { cameras, liveness, selected, hoveredId, onselect, ongroup }: Props = $props();
 
@@ -34,7 +34,7 @@
   let map: MapLibre | undefined;
   let ready = $state(false);
   let fitted = false;
-  let lastFlownId: number | null = null;
+  let lastFlownId: string | null = null;
 
   function source(id: string): GeoJSONSource {
     return map!.getSource(id) as GeoJSONSource;
@@ -143,7 +143,7 @@
       const zoom = await source('cameras').getClusterExpansionZoom(clusterId);
       if (zoom > MAX_ZOOM) {
         const leaves = await source('cameras').getClusterLeaves(clusterId, count, 0);
-        ongroup(leaves.map((leaf) => leaf.properties!.id as number));
+        ongroup(leaves.map((leaf) => leaf.properties!.id as string));
       } else {
         m.easeTo({ center: (f.geometry as Point).coordinates as [number, number], zoom });
       }
@@ -151,7 +151,7 @@
 
     m.on('click', 'points', (e: MapLayerMouseEvent) => {
       const f = e.features?.[0];
-      if (f) onselect(f.properties.id as number);
+      if (f) onselect(f.properties.id as string);
     });
 
     m.on('mousemove', 'points', (e: MapLayerMouseEvent) => {

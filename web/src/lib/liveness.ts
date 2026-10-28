@@ -3,7 +3,7 @@ import type { Camera, LivenessMap } from './types';
 export type FetchFn = (url: string, init?: RequestInit) => Promise<Response>;
 type Status = 'alive' | 'dead';
 
-const CACHE_KEY = 'cctv-liveness-v1';
+const CACHE_KEY = 'cctv-liveness-v2';
 const CACHE_TTL_MS = 600_000;
 
 /** A camera is alive when its playlist answers 200 with a non-empty body. */
@@ -30,7 +30,7 @@ export async function probe(url: string, fetchFn: FetchFn = fetch, timeoutMs = 1
 
 export async function checkAll(
   cams: Camera[],
-  opts: { concurrency: number; probe: (url: string) => Promise<Status>; onResult: (id: number, status: Status) => void },
+  opts: { concurrency: number; probe: (url: string) => Promise<Status>; onResult: (id: string, status: Status) => void },
 ): Promise<void> {
   const queue = [...cams];
   const worker = async () => {
@@ -41,15 +41,15 @@ export async function checkAll(
   await Promise.all(Array.from({ length: Math.min(opts.concurrency, queue.length) }, worker));
 }
 
-export type LivenessCache = Record<number, { status: Status; at: number }>;
+export type LivenessCache = Record<string, { status: Status; at: number }>;
 
 /** Applies results to copies of both maps. Ids in `skip` keep their current value. */
 export function applyResults(
   liveness: LivenessMap,
   cache: LivenessCache,
-  results: [number, Status][],
+  results: [string, Status][],
   now: number,
-  skip: ReadonlySet<number> = new Set(),
+  skip: ReadonlySet<string> = new Set(),
 ): { liveness: LivenessMap; cache: LivenessCache } {
   const next = { liveness: { ...liveness }, cache: { ...cache } };
   for (const [id, status] of results) {
@@ -70,7 +70,7 @@ export function loadCache(storage: Storage | null, now: number): LivenessCache {
     for (const [id, entry] of Object.entries(parsed as Record<string, unknown>)) {
       const e = entry as { status?: unknown; at?: unknown };
       if ((e?.status === 'alive' || e?.status === 'dead') && typeof e.at === 'number' && now - e.at <= CACHE_TTL_MS) {
-        fresh[Number(id)] = { status: e.status, at: e.at };
+        fresh[id] = { status: e.status, at: e.at };
       }
     }
     return fresh;

@@ -15,13 +15,13 @@
 
   let cameras: Camera[] = $state([]);
   let liveness: LivenessMap = $state({});
-  let toggles: Toggles = $state({ official: true, removed: true, dead: true });
-  let selectedId: number | null = $state(null);
-  let hoveredId: number | null = $state(null);
-  let group: number[] | null = $state(null);
+  let toggles: Toggles = $state({ kota: true, prov: true, removed: true, dead: true });
+  let selectedId: string | null = $state(null);
+  let hoveredId: string | null = $state(null);
+  let group: string[] | null = $state(null);
   let cache: LivenessCache = {};
   // Actual playback beats a background probe that finishes later.
-  const playerResolved = new Set<number>();
+  const playerResolved = new Set<string>();
 
   const visible = $derived(visibleCameras(cameras, toggles, liveness, selectedId));
   const selected = $derived(cameras.find((c) => c.id === selectedId) ?? null);
@@ -36,18 +36,18 @@
     }
   }
 
-  function record(results: [number, Status][], skip?: ReadonlySet<number>) {
+  function record(results: [string, Status][], skip?: ReadonlySet<string>) {
     if (!results.length) return;
     ({ liveness, cache } = applyResults(liveness, cache, results, Date.now(), skip));
     saveCache(storage(), cache);
   }
 
-  function recordPlayback(id: number, status: Status) {
+  function recordPlayback(id: string, status: Status) {
     playerResolved.add(id);
     record([[id, status]]);
   }
 
-  function select(id: number) {
+  function select(id: string) {
     selectedId = id;
     group = null;
     hoveredId = null;
@@ -60,7 +60,7 @@
     history.replaceState(null, '', location.pathname + location.search);
   }
 
-  function showGroup(ids: number[]) {
+  function showGroup(ids: string[]) {
     if (selectedId !== null) back();
     group = ids;
   }
@@ -72,7 +72,7 @@
   }
 
   async function checkStreams() {
-    const pending: [number, Status][] = [];
+    const pending: [string, Status][] = [];
     const flush = setInterval(() => record(pending.splice(0), playerResolved), FLUSH_MS);
     try {
       await checkAll(

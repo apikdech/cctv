@@ -1,6 +1,6 @@
 import type { Camera, Liveness, LivenessMap, Toggles } from './types';
 
-export function livenessOf(map: LivenessMap, id: number): Liveness {
+export function livenessOf(map: LivenessMap, id: string): Liveness {
   return map[id] ?? 'checking';
 }
 
@@ -22,11 +22,12 @@ export function visibleCameras(
   cams: Camera[],
   toggles: Toggles,
   liveness: LivenessMap,
-  selectedId: number | null,
+  selectedId: string | null,
 ): Camera[] {
   return cams.filter((c) => {
     if (c.id === selectedId) return true;
-    if (!toggles[c.source]) return false;
+    if (c.source === 'removed' && !toggles.removed) return false;
+    if (!toggles[c.dataset]) return false;
     return toggles.dead || livenessOf(liveness, c.id) !== 'dead';
   });
 }

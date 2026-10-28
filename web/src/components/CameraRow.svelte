@@ -5,8 +5,8 @@
   interface Props {
     camera: Camera;
     liveness: Liveness;
-    onselect: (id: number) => void;
-    onhover: (id: number | null) => void;
+    onselect: (id: string) => void;
+    onhover: (id: string | null) => void;
   }
   let { camera, liveness, onselect, onhover }: Props = $props();
 
@@ -79,6 +79,9 @@
   }
   .removed {
     background: #ea580c;
+  }
+  .prov {
+    background: #0d9488;
   }
   .dead {
     background: #9ca3af;

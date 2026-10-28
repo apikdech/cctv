@@ -9,9 +9,9 @@
     nearby: Camera[];
     liveness: LivenessMap;
     onback: () => void;
-    onselect: (id: number) => void;
-    onhover: (id: number | null) => void;
-    onliveness: (id: number, status: 'alive' | 'dead') => void;
+    onselect: (id: string) => void;
+    onhover: (id: string | null) => void;
+    onliveness: (id: string, status: 'alive' | 'dead') => void;
   }
   let { camera, nearby, liveness, onback, onselect, onhover, onliveness }: Props = $props();
 

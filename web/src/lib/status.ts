@@ -20,8 +20,8 @@ function parse(data: unknown, now: number): LivenessMap {
 
   const out: LivenessMap = {};
   for (const [id, value] of Object.entries(file.cameras as Record<string, unknown>)) {
-    const n = Number(id);
-    if (Number.isFinite(n) && (value === 'alive' || value === 'dead')) out[n] = value;
+    if (!/^(kota|prov)-\d+$/.test(id)) continue;
+    if (value === 'alive' || value === 'dead') out[id] = value;
   }
   return out;
 }

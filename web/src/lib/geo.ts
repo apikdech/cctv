@@ -2,12 +2,13 @@ import type { FeatureCollection, Point } from 'geojson';
 import { displayName, livenessOf } from './search';
 import type { Camera, LivenessMap } from './types';
 
-export type Kind = 'official' | 'removed' | 'dead';
+export type Kind = 'kota' | 'prov' | 'removed' | 'dead';
 
-export type CameraFeatureCollection = FeatureCollection<Point, { id: number; title: string; kind: Kind }>;
+export type CameraFeatureCollection = FeatureCollection<Point, { id: string; title: string; kind: Kind }>;
 
 export function kindOf(cam: Camera, liveness: LivenessMap): Kind {
-  return livenessOf(liveness, cam.id) === 'dead' ? 'dead' : cam.source;
+  if (livenessOf(liveness, cam.id) === 'dead') return 'dead';
+  return cam.source === 'removed' ? 'removed' : cam.dataset;
 }
 
 export function toFeatureCollection(cams: Camera[], liveness: LivenessMap): CameraFeatureCollection {
