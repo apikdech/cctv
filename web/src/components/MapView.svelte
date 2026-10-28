@@ -44,8 +44,8 @@
   let lastFlownId: string | null = null;
   let styledTheme: Theme | null = null;
 
-  function source(id: string): GeoJSONSource {
-    return map!.getSource(id) as GeoJSONSource;
+  function source(id: string): GeoJSONSource | undefined {
+    return map?.getSource(id) as GeoJSONSource | undefined;
   }
 
   function point(cam: Camera): Feature<Point> {
@@ -149,12 +149,13 @@
 
     m.on('click', 'clusters', async (e: MapLayerMouseEvent) => {
       const f = e.features?.[0];
-      if (!f) return;
+      const cameraSource = source('cameras');
+      if (!f || !cameraSource) return;
       const clusterId = f.properties.cluster_id as number;
       const count = f.properties.point_count as number;
-      const zoom = await source('cameras').getClusterExpansionZoom(clusterId);
+      const zoom = await cameraSource.getClusterExpansionZoom(clusterId);
       if (zoom > MAX_ZOOM) {
-        const leaves = await source('cameras').getClusterLeaves(clusterId, count, 0);
+        const leaves = await cameraSource.getClusterLeaves(clusterId, count, 0);
         ongroup(leaves.map((leaf) => leaf.properties!.id as string));
       } else {
         m.easeTo({ center: (f.geometry as Point).coordinates as [number, number], zoom });
@@ -228,7 +229,7 @@
 
   $effect(() => {
     if (!ready) return;
-    source('cameras').setData(toFeatureCollection(cameras, liveness));
+    source('cameras')?.setData(toFeatureCollection(cameras, liveness));
     if (!fitted && cameras.length) {
       const bounds = new LngLatBounds();
       for (const c of cameras) bounds.extend([c.lon, c.lat]);
@@ -241,7 +242,7 @@
     if (!ready) return;
     const hovered = hoveredId === null ? undefined : cameras.find((c) => c.id === hoveredId);
     const marks = [selected, hovered].filter((c): c is Camera => !!c).map(point);
-    source('highlight').setData({ type: 'FeatureCollection', features: marks });
+    source('highlight')?.setData({ type: 'FeatureCollection', features: marks });
   });
 
   $effect(() => {
