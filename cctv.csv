@@ -1,0 +1,111 @@
+cctv_id,cctv_title,cctv_link,cctv_category,cctv_status,cctv_latitude,cctv_longitude,kecamatan_nama,kelurahan_nama
+1,Simpang APMD (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_apmd.stream/playlist.m3u8,1,0,-7.791971853164589,110.39164423942567,GONDOKUSUMAN,BACIRO
+2,Simpang Jlagran (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_jlagran.stream/playlist.m3u8,1,0,-7.789037936569344,110.35751581511731,GEDONGTENGEN,PRINGGOKUSUMAN
+9,Simpang Jokteng Kulon (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_joktengkulon.stream/playlist.m3u8,1,0,-7.81294,110.35594,MANTRIJERON,GEDONGKIWO
+10,Simpang Jokteng Wetan,https://cctvjss.jogjakota.go.id/atcs/ATCS_joktengwetan.stream/playlist.m3u8,1,0,-7.814380894891082,110.36806762218477,KRATON,PANEMBAHAN
+17,Simpang PKU Muh. (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_pkumuh.stream/playlist.m3u8,1,0,-7.801283,110.362061,GONDOMANAN,NGUPASAN
+20,Simpang Serangan (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_serangan.stream/playlist.m3u8,1,0,-7.800627191909387,110.35540228552313,NGAMPILAN,NGAMPILAN
+22,Simpang Tungkak (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_tungkak.stream/playlist.m3u8,1,0,-7.815638294774954,110.37609279155733,MERGANGSAN,WIROGUNAN
+23,Simpang Tunjung (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_tunjung.stream/playlist.m3u8,1,0,-7.7937256793331935,110.37776112556459,DANUREJAN,BAUSASRAN
+24,Simpang UKDW (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_ukdw.stream/playlist.m3u8,1,0,-7.787246808444076,110.37864159708089,GONDOKUSUMAN,KLITREN
+25,Simpang Wirobrajan (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_wirobrajan.stream/playlist.m3u8,1,0,-7.801025054502792,110.35178123104426,WIROBRAJAN,WIROBRAJAN
+29,Sungai Gajah Wong 2,https://cctvjss.jogjakota.go.id/bpbd/BPBD_gajahwong2.stream/playlist.m3u8,2,0,-7.790914106163658,110.39598405361177,UMBULHARJO,MUJA MUJU
+30,Sungai Winongo,https://cctvjss.jogjakota.go.id/bpbd/BPBD_kaliwinongo.stream/playlist.m3u8,2,0,-7.789489704931309,110.35666287355627,GEDONGTENGEN,PRINGGOKUSUMAN
+31,Sungai Ngentak,https://cctvjss.jogjakota.go.id/bpbd/BPBD_ngentak.stream/playlist.m3u8,2,0,-7.722645179146617,110.38926337561489,NGAGLIK,SINDUHARJO
+147,Simpang Ibu Ruswo (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_Ibu_Ruswo.stream/playlist.m3u8,1,0,-7.803446455001373,110.36923706531525,GONDOMANAN,PRAWIRODIRJAN
+148,Simpang BPK (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_bpk.stream/playlist.m3u8,1,0,-7.790786548521135,110.35380363464357,TEGALREJO,TEGALREJO
+157,Simpang Jogokariyan V. Selatan,https://cctvjss.jogjakota.go.id/atcs/ATCS_jogokaryan.stream/playlist.m3u8,1,0,-7.8246771495840735,110.36772693747565,MERGANGSAN,BRONTOKUSUMAN
+159,Simpang APPI - JL.Mentri Supeno,https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_JlMentriSupeno.stream/playlist.m3u8,1,0,-7.81616527748688,110.38318996932517,UMBULHARJO,PANDEYAN
+160,Simpang Kiai Mojo 1 (Barat),https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_KyaiMojo.stream/playlist.m3u8,1,0,-7.7827290840714,110.35790740623065,JETIS,BUMIJO
+161,Simpang Kiai Mojo 2 (Timur),https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_KyaiMojo2.stream/playlist.m3u8,1,0,-7.782686735299533,110.35799326837432,JETIS,BUMIJO
+163,Simpang Pingit 1 - Jl.Tentara Pelajar,https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_Pingit1.stream/playlist.m3u8,1,0,-7.78273439372399,110.3606539964676,JETIS,BUMIJO
+164,Simpang Pingit 2 - Jl. Tentara Pelajar,https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_Pingit2.stream/playlist.m3u8,1,0,-7.782906599809257,110.36073178052905,JETIS,BUMIJO
+165,Simpang Pingit 3 - Jl. Tentara Pelajar,https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_Pingit3.stream/playlist.m3u8,1,0,-7.782989513873122,110.36065936088563,JETIS,BUMIJO
+166,Simpang Gambiran 1 - Jl.Veteran,https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_Gambiran1.stream/playlist.m3u8,1,0,-7.81438617624503,110.39168715476991,UMBULHARJO,PANDEYAN
+167,Simpang Gambiran 2 - Jl.Veteran,https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_Gambiran2.stream/playlist.m3u8,1,0,-7.81440743465494,110.39164423942567,UMBULHARJO,PANDEYAN
+168,Simpang APPI 2 - Jl.Mentri Supeno,https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_JlMentriSupeno2.stream/playlist.m3u8,1,0,-7.816740538562657,110.384139418602,UMBULHARJO,PANDEYAN
+169,Simpang Karang Tunggal (S3 Jl. Kol.Sugiyono - Jl. Sisingamangaraja) 1,https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_SopMerah1.stream/playlist.m3u8,1,0,-7.815185853586888,110.37321213463336,MERGANGSAN,BRONTOKUSUMAN
+170,Simpang Karang Tunggal (S3 Jl. Kol.Sugiyono - Jl. Sisingamangaraja) 2,https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_SopMerah2.stream/playlist.m3u8,1,0,-7.815170621589384,110.37314236437618,MERGANGSAN,BRONTOKUSUMAN
+171,Simpang Jokteng Wetan - Jl. Parangtritis (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_JoktengWetan.stream/playlist.m3u8,1,0,-7.814580608924652,110.36834641369498,,
+172,Simpang Pasar Gading 1 (Timur),https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_PasarGading1.stream/playlist.m3u8,1,0,-7.8139588927123365,110.36288023131759,MANTRIJERON,MANTRIJERON
+173,Simpang Pasar Gading 2 (Barat),https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_PasarGading2.stream/playlist.m3u8,1,0,-7.813985428289541,110.36279439652623,MANTRIJERON,MANTRIJERON
+174,Simpang Sugeng Jeroni (Bugisan) 1,https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_SugengJeroni1.stream/playlist.m3u8,1,0,-7.811545973048925,110.34952285367291,WIROBRAJAN,PATANGPULUHAN
+175,Simpang Sugeng Jeroni (Bugisan) 2,https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_SugengJeroni2.stream/playlist.m3u8,1,0,-7.811513464553306,110.3493618527512,WIROBRAJAN,PATANGPULUHAN
+176,Parkiran Ngabean,https://cctvjss.jogjakota.go.id/atcs/ATCS_Parkiran_Ngabean.stream/playlist.m3u8,1,0,-7.801304669900324,110.3562392409939,NGAMPILAN,NGAMPILAN
+177,Simpang Pingit 4 - Jl. Tentara Pelajar,https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_Pingit4.stream/playlist.m3u8,1,0,-7.782895969804031,110.36082565784456,JETIS,BUMIJO
+178,Simpang Mirota (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_mirota.stream/playlist.m3u8,1,0,-7.776092711190059,110.37438154220582,GONDOKUSUMAN,TERBAN
+179,Simpang Taman Sari (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_tamansari.stream/playlist.m3u8,1,0,-7.808656995329348,110.35600572824481,MANTRIJERON,GEDONGKIWO
+180,RTHP Semaki  1,https://cctvjss.jogjakota.go.id/rthp/rthp_semaki_1.stream/playlist.m3u8,9,0,-7.801009107286565,110.38486361503602,UMBULHARJO,SEMAKI
+181,RTHP Semaki 2,https://cctvjss.jogjakota.go.id/rthp/rthp_semaki_2.stream/playlist.m3u8,9,0,-7.800863445056773,110.38476164953087,UMBULHARJO,SEMAKI
+195,RTHP Klitren 2,https://cctvjss.jogjakota.go.id/rthp/rthp_klitren_2.stream/playlist.m3u8,9,0,-7.780754051505308,110.38661509752275,GONDOKUSUMAN,KLITREN
+196,RTHP Gunungketur 1,https://cctvjss.jogjakota.go.id/rthp/rthp_gunungketur_1.stream/playlist.m3u8,9,0,-7.798514511635184,110.37587821483612,PAKUALAMAN,PURWO KINANTI
+197,RTHP Gunungketur 2,https://cctvjss.jogjakota.go.id/rthp/rthp_gunungketur_2.stream/playlist.m3u8,9,0,-7.799409389904506,110.37850946122491,PAKUALAMAN,GUNUNG KETUR
+199,RTHP Brontokusuman (blkg Kel) 2,https://cctvjss.jogjakota.go.id/rthp/rthp_brontokusuman_blkgKel_2.stream/playlist.m3u8,9,0,-7.823094663198694,110.36960304501743,MERGANGSAN,BRONTOKUSUMAN
+201,RTHP Segoro Amarto Tegalrejo 2,https://cctvjss.jogjakota.go.id/rthp/rthp_segoro_amarto_tegalrejo_2.stream/playlist.m3u8,9,0,-7.790451792570068,110.34968912601472,TEGALREJO,TEGALREJO
+202,RTHP Pakudaya Pakuncen 1,https://cctvjss.jogjakota.go.id/rthp/rthp_pakudaya_pakuncen_1.stream/playlist.m3u8,9,0,-7.797903142588836,110.35138428211214,WIROBRAJAN,PAKUNCEN
+203,RTHP Pakudaya Pakuncen 2,https://cctvjss.jogjakota.go.id/rthp/rthp_pakudaya_pakuncen_2.stream/playlist.m3u8,9,0,-7.797937190603234,110.35135745969455,WIROBRAJAN,PAKUNCEN
+204,Simpang Amongrogo View Timur,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Amongrogo_View_Timur.stream/playlist.m3u8,1,0,-7.797400394268464,110.38367271423341,UMBULHARJO,SEMAKI
+205,Simpang Demangan View Utara,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Demangan_View_Utara.stream/playlist.m3u8,1,0,-7.783007619231968,110.38771748542787,GONDOKUSUMAN,KLITREN
+206,Simpang Demangan View Selatan,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Demangan_View_Selatan.stream/playlist.m3u8,1,0,-7.783214902770064,110.38801789316496,GONDOKUSUMAN,DEMANGAN
+207,Simpang Demangan View Timur,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Demangan_View_Timur.stream/playlist.m3u8,1,0,-7.783107508322567,110.38792029309523,,
+227,Simpang DeBritto View Utara,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_DeBritto_View_Utara.stream/playlist.m3u8,1,0,-7.783214903094468,110.39223968949956,DEPOK,CATUR TUNGGAL
+232,Simpang Rejowinangun View Timur,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Rejowinangun_View_Timur.stream/playlist.m3u8,1,0,-7.8107084889395955,110.40206193956693,KOTAGEDE,REJOWINANGUN
+233,Simpang Balaikota View Timur,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Balaikota_View_Utara.stream/playlist.m3u8,1,0,-7.79952415717506,110.3923523426056,UMBULHARJO,MUJA MUJU
+234,Simpang Balaikota View Utara-Barat,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Balaikota_View_Timur.stream/playlist.m3u8,1,0,-7.799623974573921,110.3922959120451,UMBULHARJO,MUJA MUJU
+237,Simpang Gedongkuning (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_Gedongkuning.stream/playlist.m3u8,1,0,-7.801731782919982,110.40140518577397,BANGUNTAPAN,BANGUNTAPAN
+243,Pasar Demangan View Selatan,https://cctvjss.jogjakota.go.id/atcs/ATCS_Pasar_Demangan_View_Selatan.stream/playlist.m3u8,1,0,-7.780939793541291,110.38817846406626,GONDOKUSUMAN,DEMANGAN
+244,Simpang Galeria (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Galeria_TimurSelatan.stream/playlist.m3u8,1,0,-7.78299465637002,110.37923132903515,GONDOKUSUMAN,KOTABARU
+249,Simpang Jati Kencana (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_JatiKencana.stream/playlist.m3u8,1,0,-7.781720077527172,110.35258206065863,TEGALREJO,TEGALREJO
+251,Simpang Tugu (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Tugu.stream/playlist.m3u8,1,0,-7.782902141139962,110.36697879463897,JETIS,GOWONGAN
+273,Simpang Bausasran (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_S4_Bausasran.stream/playlist.m3u8,1,0,-7.796832738009271,110.37259619466906,DANUREJAN,TEGALPANGGUNG
+275,Simpang Pingit 5 (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_Pingit5.stream/playlist.m3u8,1,0,-7.782213605984465,110.3593021631241,JETIS,BUMIJO
+323,Gerbang Masuk Utara V. Timur (Luar),https://cctvjss.jogjakota.go.id/balaikota/Balaikota_Gerbang_Masuk_Utara_View_Timur-Luar.stream/playlist.m3u8,12,0,-7.7992572546386425,110.39085832343332,UMBULHARJO,MUJA MUJU
+324,Gerbang Timur PKK V. Utara (Luar),https://cctvjss.jogjakota.go.id/balaikota/Balaikota_Gerbang_Timur_PKK_View_Utara-Luar.stream/playlist.m3u8,12,0,-7.800351051058131,110.39218530969853,UMBULHARJO,MUJA MUJU
+325,Gerbang Timur PKK V. Selatan (Luar),https://cctvjss.jogjakota.go.id/balaikota/Balaikota_Gerbang_Timur_PKK_View_Selatan-Luar.stream/playlist.m3u8,12,0,-7.800517942197907,110.39217695404965,UMBULHARJO,MUJA MUJU
+360,Simpang Balaikota (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Balaikota_PTZ.stream/playlist.m3u8,1,0,-7.799677125324242,110.39226912295878,,
+361,Simpang Mandala Krida (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Mandala_Krida_PTZ.stream/playlist.m3u8,1,0,-7.797693605585319,110.38498739881717,,
+362,Simpang Basen,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Basen.stream/playlist.m3u8,1,0,-7.820469226095182,110.40082275730018,KOTAGEDE,PRENGGAN
+368,Simpang Melia Purosani (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Melia_Purosani.stream/playlist.m3u8,1,0,-7.796728568306433,110.36910532920628,,
+369,Simpang Patangpuluhan (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Patangpuluhan.stream/playlist.m3u8,1,0,-7.807857732704685,110.35038569683671,,
+370,Simpang Atmosukarto (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Atmosukarto.stream/playlist.m3u8,1,0,-7.7882638773187205,110.37832799636712,,
+396,Simpang Pasar Telo View Selatan,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Pasar_Telo_View_Selatan.stream/playlist.m3u8,1,0,-7.824088403798951,110.3732416032892,,
+397,Simpang Pasar Telo View Utara,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Pasar_Telo_View_Utara.stream/playlist.m3u8,1,0,-7.824001180644657,110.37327834764065,,
+398,Simpang Gambiran View Timur,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Gambiran_View_Timur.stream/playlist.m3u8,1,0,-7.8179756585404165,110.39079264444666,,
+399,Simpang Gambiran View Barat,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Gambiran_View_Barat.stream/playlist.m3u8,1,0,-7.8180180722047075,110.39069870536835,,
+434,Jl. Nyoman Oka (Gereja Kotabaru),https://cctvjss.jogjakota.go.id/kotabaru/Jl-Nyoman-Oka.stream/playlist.m3u8,34,0,-7.7878952261847605,110.37133456075773,GONDOKUSUMAN,KOTABARU
+435,Jl. Sajiono (Roemi),https://cctvjss.jogjakota.go.id/kotabaru/Jl-Sajiono.stream/playlist.m3u8,34,0,-7.785588723515335,110.37427424016906,GONDOKUSUMAN,KOTABARU
+436,Jl. Yos Sudarso (Mie Gacoan),https://cctvjss.jogjakota.go.id/kotabaru/ANPR-Jl-Yos-Sudarso.stream/playlist.m3u8,34,0,-7.788155379820129,110.37492319976059,GONDOKUSUMAN,KOTABARU
+437,Jl. Wardhani (Selatan-Timur SMPN 5),https://cctvjss.jogjakota.go.id/kotabaru/ANPR-Jl-Wardhani.stream/playlist.m3u8,34,0,-7.787315924164162,110.3753846883774,GONDOKUSUMAN,KOTABARU
+439,Jl. Ahmad Jazuli (Apotek K24),https://cctvjss.jogjakota.go.id/kotabaru/ANPR-Jl-Ahmad-Jazuli.stream/playlist.m3u8,34,0,-7.789187005983453,110.36966623154613,GONDOKUSUMAN,KOTABARU
+440,Jl. F.M. Noto (Raminten),https://cctvjss.jogjakota.go.id/kotabaru/ANPR-Jl-FM-Noto-Raminten.stream/playlist.m3u8,34,0,-7.784987949669264,110.37159740924837,GONDOKUSUMAN,KOTABARU
+441,Jl. F.M. Noto (Gardu ANIEM),https://cctvjss.jogjakota.go.id/kotabaru/ANPR-Jl-FM-Noto-Gardu-Aniem.stream/playlist.m3u8,34,0,-7.786832072162349,110.3721703274016,GONDOKUSUMAN,KOTABARU
+443,Jl. Juadi (Pojok Utara-Barat Telkom),https://cctvjss.jogjakota.go.id/kotabaru/Jl-Juadi.stream/playlist.m3u8,34,0,-7.785822400093772,110.37456929683687,GONDOKUSUMAN,KOTABARU
+448,KemMJ-Timur Kemantren,https://cctvjss.jogjakota.go.id/kecamatan/KemMJ-TimurKemantren.stream/playlist.m3u8,35,0,-7.820748744333765,110.3617836916383,MANTRIJERON,SURYODININGRATAN
+449,KemMJ-Pendopo Kemantren,https://cctvjss.jogjakota.go.id/kecamatan/KemMJ-PendopoKemantren.stream/playlist.m3u8,35,0,-7.820833794284509,110.36169744788464,MANTRIJERON,SURYODININGRATAN
+450,KemMJ-Jalan Selatan Kemantren,https://cctvjss.jogjakota.go.id/kecamatan/KemMJ-JalanSelatanKemantren.stream/playlist.m3u8,35,0,-7.820772059437312,110.36169728101575,MANTRIJERON,SURYODININGRATAN
+466,Simpang Wirosaban View Selatan,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Wirosaban_View_Selatan.stream/playlist.m3u8,1,0,-7.824673029268395,110.37842094761463,UMBULHARJO,SOROSUTAN
+467,Simpang Wirosaban View Utara,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Wirosaban_View_Utara.stream/playlist.m3u8,1,0,-7.824545433853183,110.3783619390163,UMBULHARJO,SOROSUTAN
+468,Simpang Wirosaban View Barat,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Wirosaban_View_Barat.stream/playlist.m3u8,1,0,-7.82460391053715,110.37829756463232,UMBULHARJO,SOROSUTAN
+469,Simpang Wirosaban View Timur,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Wirosaban_View_Timur.stream/playlist.m3u8,1,0,-7.824588093870417,110.3784584971732,UMBULHARJO,SOROSUTAN
+477,Simpang Jogokariyan V. Utara,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Jogokariyan_View_Utara.stream/playlist.m3u8,1,0,-7.824631710782664,110.36762394240893,,
+518,RTHP Gajah Wong Edu Park 3,https://cctvjss.jogjakota.go.id/rthp/rthp_gajahwong_edupark_3.stream/playlist.m3u8,9,0,-7.817672502802456,110.3935052560747,UMBULHARJO,PANDEYAN
+519,RTHP Gajah Wong Edu Park 2,https://cctvjss.jogjakota.go.id/rthp/rthp_gajahwong_edupark_2.stream/playlist.m3u8,9,0,-7.81751438246716,110.39358079113731,UMBULHARJO,PANDEYAN
+520,RTHP Gajah Wong Edu Park 1,https://cctvjss.jogjakota.go.id/rthp/rthp_gajahwong_edupark_1.stream/playlist.m3u8,9,0,-7.8174877026184175,110.39348434351206,UMBULHARJO,PANDEYAN
+522,Simpang Tegalgendu V. Selatan,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Tegalgendu.stream/playlist.m3u8,1,0,-7.825719943855978,110.39001342912228,UMBULHARJO,GIWANGAN
+523,Simpang Letjen Suprapto-KS. Tubun V. Selatan,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Letjen_Suprapto_KS_Tubun_View_Selatan.stream/playlist.m3u8,1,0,-7.797387530558577,110.35645371629705,NGAMPILAN,NGAMPILAN
+524,Simpang Letjen Suprapto-KS. Tubun V. Utara,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Letjen_Suprapto_KS_Tubun_View_Utara.stream/playlist.m3u8,1,0,-7.797292136759732,110.356416259686,NGAMPILAN,NGAMPILAN
+797,Jl. Mas Suharto V. Selatan (Depan LASERCOM),https://cctvjss.jogjakota.go.id/tps-liar/S3_Jl_Mas Suharto-Jl_Tegalpanggung.stream/playlist.m3u8,1,0,-7.793199498598524,110.37106096471014,DANUREJAN,TEGALPANGGUNG
+798,Jl. Mas Suharto V. Utara (Barat Sari Wangi Parfum),https://cctvjss.jogjakota.go.id/tps-liar/S3_Jl_Mas Suharto-Jl_Tukangan.stream/playlist.m3u8,1,0,-7.793247236280253,110.3715920065371,DANUREJAN,TEGALPANGGUNG
+816,RTHP Jopraban 3,https://cctvjss.jogjakota.go.id/rthp/rthp_jopraban_3.stream/playlist.m3u8,9,0,-7.802782052880773,110.35166856344493,WIROBRAJAN,WIROBRAJAN
+817,RTHP Jopraban 2,https://cctvjss.jogjakota.go.id/rthp/rthp_jopraban_2.stream/playlist.m3u8,9,0,-7.802782095695886,110.35160417812001,WIROBRAJAN,WIROBRAJAN
+818,RTHP Jopraban 1,https://cctvjss.jogjakota.go.id/rthp/rthp_jopraban_1.stream/playlist.m3u8,9,0,-7.802723670902581,110.35152911182564,WIROBRAJAN,WIROBRAJAN
+829,Simpang Demangan View Timur,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Demangan_View_Timur.stream/playlist.m3u8,1,0,-7.783069238806793,110.38786339750006,GONDOKUSUMAN,DEMANGAN
+839,RTHP Bumen,https://cctvjss.jogjakota.go.id/rthp/rthp_bumen.stream/playlist.m3u8,9,0,-7.826495827309985,110.40351567737893,KOTAGEDE,PURBAYAN
+842,Depan DPRD V. Utara,https://cctvjss.jogjakota.go.id/dprd-kota/depan-dprd-v-utara.stream/playlist.m3u8,195,0,-7.7969677292407225,110.39246499264898,UMBULHARJO,MUJA MUJU
+843,Depan DPRD V. Selatan,https://cctvjss.jogjakota.go.id/dprd-kota/depan-dprd-v-selatan.stream/playlist.m3u8,195,0,-7.797154524077225,110.3924489076006,UMBULHARJO,MUJA MUJU
+844,Depan DPRD Pos Security,https://cctvjss.jogjakota.go.id/dprd-kota/depan-dprd-pos-security.stream/playlist.m3u8,195,0,-7.7970634121194955,110.39233624524866,UMBULHARJO,MUJA MUJU
+850,Simpang Pasar Telo (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_Pasar_Telo_PTZ.stream/playlist.m3u8,1,0,-7.823812428983515,110.37315298653814,MERGANGSAN,BRONTOKUSUMAN
+873,Simpang Mantrigawen (PTZ),https://cctvjss.jogjakota.go.id/atcs/ATCS_Mantrigawen_PTZ.stream/playlist.m3u8,1,0,-7.8089628315616855,110.36901700929627,MERGANGSAN,KEPARAKAN
+874,Utara-Timur Gardena (Jl. Urip Sumoharjo) V. Timur,https://cctvjss.jogjakota.go.id/atcs/ATCS_Utara-Timur_Gardena_Jl_Urip Sumoharjo_V_Timur.stream/playlist.m3u8,1,0,-7.782819433845128,110.38124797149439,GONDOKUSUMAN,KLITREN
+896,Simpang Mirota V. Barat (FIX),https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Mirota_View_Barat.stream/playlist.m3u8,1,0,-7.7759895810002995,110.37433326381118,GONDOKUSUMAN,TERBAN
+900,Simpang Jati Kencana V. Barat,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_JatiKencana_Fix.stream/playlist.m3u8,1,0,-7.7814478939660825,110.35251060338831,TEGALREJO,BENER

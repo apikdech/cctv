@@ -1,0 +1,63 @@
+cctv_id,cctv_title,first_seen,last_seen,seen_in,cctv_link,kecamatan_nama,stream,stream
+3,Simpang Cendana (PTZ),20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/atcs/ATCS_cendana.stream/playlist.m3u8,,dead,dead
+5,Simpang Gayam (PTZ),20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/atcs/ATCS_gayam.stream/playlist.m3u8,,dead,dead
+6,Simpang Gondomanan (PTZ),20240812184657,20250901071340,12,https://cctvjss.jogjakota.go.id/atcs/ATCS_gondomanan.stream/playlist.m3u8,,live,live
+14,Simpang KM Nol (PTZ),20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/atcs/ATCS_kmnol.stream/playlist.m3u8,,live,live
+16,Simpang Permata (PTZ),20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/atcs/ATCS_permata.stream/playlist.m3u8,,live,live
+19,Simpang Sentul (PTZ),20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/atcs/ATCS_sentul.stream/playlist.m3u8,,dead,dead
+21,Simpang SGM (PTZ),20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/atcs/ATCS_simpangsgm.stream/playlist.m3u8,,live,live
+27,Sungai Buntung 2,20240812184657,20240822102806,9,https://cctvjss.jogjakota.go.id/bpbd/BPBD_buntung2.stream/playlist.m3u8,,dead,dead
+28,Sungai Gajah Wong 1,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/bpbd/BPBD_gajahwong1.stream/playlist.m3u8,,dead,dead
+33,Malioboro_Selatan_Teteg,20240812184657,20250901071340,13,https://cctvjss.jogjakota.go.id/malioboro/Malioboro_1_Selatan_Teteg.stream/playlist.m3u8,,live,live
+34,Malioboro_Depan_Toko_Subur,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/malioboro/Malioboro_2_Depan_Toko_Subur.stream/playlist.m3u8,,live,live
+35,Malioboro_Depan_Dispar,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/malioboro/Malioboro_3_Depan_Dispar.stream/playlist.m3u8,,live,live
+89,Malioboro_Depan_DPRD,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/malioboro/Malioboro_4_Depan_DPRD.stream/playlist.m3u8,,live,live
+91,Malioboro_Perwakilan,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/malioboro/Malioboro_5_Perwakilan.stream/playlist.m3u8,,live,live
+92,Malioboro_Mall_Utara,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/malioboro/Malioboro_6_Mall_Utara.stream/playlist.m3u8,,live,live
+93,Malioboro_Mall_Selatan,20240812184657,20250901071340,13,https://cctvjss.jogjakota.go.id/malioboro/Malioboro_7_Mall_Selatan.stream/playlist.m3u8,,live,live
+94,Malioboro_Pasar_Beringharjo,20240812184657,20250901071340,13,https://cctvjss.jogjakota.go.id/malioboro/Malioboro_30_Pasar_Beringharjo.stream/playlist.m3u8,,live,live
+129,Simpang UST (PTZ),20240812184657,20250901071340,13,https://cctvjss.jogjakota.go.id/atcs/ATCS_UST.stream/playlist.m3u8,,live,live
+130,Simpang Glagahsari,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/atcs/ATCS_Glagahsari.stream/playlist.m3u8,,live,live
+151,Malioboro_Mutiara_Lama,20250221061328,20250901071340,4,https://cctvjss.jogjakota.go.id/malioboro/Malioboro_8_Mutiara_Lama.stream/playlist.m3u8,GEDONG TENGEN,live,live
+152,Malioboro_Mutiara_Baru,20240812184657,20250901071340,11,https://cctvjss.jogjakota.go.id/malioboro/Malioboro_9_Mutiara_Baru.stream/playlist.m3u8,,live,live
+153,Malioboro_Kepatihan,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/malioboro/Malioboro_10_Kepatihan.stream/playlist.m3u8,,live,live
+154,Malioboro_Terang_Bulan,20240812184657,20250901071340,12,https://cctvjss.jogjakota.go.id/malioboro/Malioboro_11_Terang_Bulan.stream/playlist.m3u8,,live,live
+155,Malioboro_Ramayana,20240812184657,20250901071340,13,https://cctvjss.jogjakota.go.id/malioboro/Malioboro_12_Ramayana.stream/playlist.m3u8,,live,live
+156,Malioboro_Gunungmas,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/malioboro/Malioboro_13_Gunungmas.stream/playlist.m3u8,,live,live
+198,RTHP Brontokusuman (blkg Kel) 1,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/rthp/rthp_brontokusuman_blkgKel_1.stream/playlist.m3u8,,dead,dead
+228,Simpang Terban View Utara,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Terban_View_Utara.stream/playlist.m3u8,,live,live
+235,Malioboro_Simpang_Pajeksan_Suryatmajan,20240812184657,20250901071340,12,https://cctvjss.jogjakota.go.id/malioboro/Malioboro_22_Simpang_Pajeksan_Suryatmajan.stream/playlist.m3u8,,live,live
+236,Malioboro_Simpang_Reksobayan,20240812184657,20250901071340,13,https://cctvjss.jogjakota.go.id/malioboro/Malioboro_24_Simpang_Reksobayan.stream/playlist.m3u8,,live,live
+238,Simpang Gramedia,20240812184657,20240822102806,9,https://cctvjss.jogjakota.go.id/atcs/ATCS_gramedia.stream/playlist.m3u8,,live,live
+239,Simpang Jetis (PTZ),20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/atcs/ATCS_Jetis.stream/playlist.m3u8,,live,live
+241,Simpang Terban View Timur,20240812184657,20250901071340,13,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Terban_View_Timur.stream/playlist.m3u8,,live,live
+242,Simpang Terban View Barat,20240812184657,20250901071340,13,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Terban_View_Barat.stream/playlist.m3u8,,live,live
+245,Nol Km. - Utara,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/malioboro/NolKm_Utara.stream/playlist.m3u8,,live,live
+246,Nol Km. - Timur,20240812184657,20250901071340,13,https://cctvjss.jogjakota.go.id/malioboro/NolKm_Timur.stream/playlist.m3u8,,live,live
+247,Nol Km. - Gd. Agung,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/malioboro/NolKm_GdAgung.stream/playlist.m3u8,,live,live
+248,Simpang Gramedia 2 (PTZ),20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/atcs/ATCS_Gramedia_2.stream/playlist.m3u8,,live,live
+250,Simpang Borobudur Plaza,20240816083146,20250901071340,9,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Borobudur_Plaza.stream/playlist.m3u8,,live,live
+326,Malioboro_Utara_Mall,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/malioboro/Malioboro_25_Utara_Mall.stream/playlist.m3u8,,live,live
+327,Malioboro_Utara_Inna_Malioboro,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/malioboro/Malioboro_21_Utara_Inna_Malioboro.stream/playlist.m3u8,,live,live
+331,Malioboro_Depan_BPD_Kepatihan,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/malioboro/Malioboro_23_Depan_BPD_Kepatihan.stream/playlist.m3u8,,live,live
+356,S3 Nyai Ahmad Dahlan,20240812184657,20250221061328,11,https://cctvjss.jogjakota.go.id/tps-liar/S3_Nyai_Ahmad_Dahlan.stream/playlist.m3u8,,live,live
+357,S3 Jalan Gajah,20240812184657,20250221061328,11,https://cctvjss.jogjakota.go.id/tps-liar/S3_Jalan_Gajah.stream/playlist.m3u8,,dead,dead
+371,Simpang Gondomanan View Selatan,20240812184657,20250901071340,12,https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Gondomanan_View_Selatan.stream/playlist.m3u8,,live,live
+428,Utara Jl. Gowongan Lor,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/margo-utomo/Gowongan-Lor.stream/playlist.m3u8,,live,live
+429,Optic Tugu,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/margo-utomo/Optic-Tugu.stream/playlist.m3u8,,live,live
+430,Selatan Olive,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/margo-utomo/Selatan-Olive.stream/playlist.m3u8,,live,live
+431,Selatan Tugu,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/margo-utomo/Toko-Cat-Wahyu.stream/playlist.m3u8,,live,live
+432,Wijaya Baru Travel,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/margo-utomo/Wijaya-Baru-Travel.stream/playlist.m3u8,,live,live
+433,Utara Teteg,20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/margo-utomo/Wisma-Ratih.stream/playlist.m3u8,,live,live
+438,Jl. Prau (Fave Hotel),20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/kotabaru/ANPR-Jl-Prau.stream/playlist.m3u8,,dead,dead
+442,Jl. Suroto (Depan Gerbang Rumdin Wawali),20240812184657,20250221061328,11,https://cctvjss.jogjakota.go.id/kotabaru/Jl-Suroto.stream/playlist.m3u8,,dead,dead
+444,Jl. F.M. Noto (McDonalds),20240812184657,20250901071340,13,https://cctvjss.jogjakota.go.id/kotabaru/ANPR-Jl-FM-Noto-McDonalds.stream/playlist.m3u8,,live,live
+451,KemMJ-Barat TK,20241216101120,20250901071340,4,https://cctvjss.jogjakota.go.id/kecamatan/KemMJ-BaratTK.stream/playlist.m3u8,,dead,dead
+452,KemMJ-Timur Kelurahan,20241216101120,20250901071340,4,https://cctvjss.jogjakota.go.id/kecamatan/KemMJ-TimurKelurahan.stream/playlist.m3u8,,dead,dead
+453,Terban-S3 Sagan View Timur,20241216101120,20241216101120,1,https://cctvjss.jogjakota.go.id/terban/Terban-S3_Sagan_View_Timur.stream/playlist.m3u8,GONDOKUSUMAN,live,live
+454,Terban-S3 Sagan View Selatan,20241216101120,20241216101120,1,https://cctvjss.jogjakota.go.id/terban/Terban-S3_Sagan_View_Selatan.stream/playlist.m3u8,GONDOKUSUMAN,live,live
+476,Kleringan (Jl. Abu Bakar Ali),20240812184657,20250901071340,14,https://cctvjss.jogjakota.go.id/atcs/ATCS_Kleringan_Abu_Bakar_Ali.stream/playlist.m3u8,,dead,dead
+525,Simpang Glagahsari (PTZ),20241216101120,20250901071340,5,https://cctvjss.jogjakota.go.id/atcs/ATCS_Glagahsari_PTZ.stream/playlist.m3u8,UMBULHARJO,live,live
+755,Simpang Gramedia V. Utara-Timur,20241216101120,20250901071340,5,https://cctvjss.jogjakota.go.id/atcs/ATCS_gramedia.stream/playlist.m3u8,GONDOKUSUMAN,live,live
+845,Utara Balaikota V. Timur,20250901071340,20250901071340,1,https://cctvjss.jogjakota.go.id/balaikota/Balaikota_Utara_Balkot_V_Timur.stream/playlist.m3u8,UMBULHARJO,live,live
+846,Utara Balaikota V. Gerbang Masuk,20250901071340,20250901071340,1,https://cctvjss.jogjakota.go.id/balaikota/Balaikota_Utara_Balkot_V_Gerbang_Masuk.stream/playlist.m3u8,UMBULHARJO,live,live

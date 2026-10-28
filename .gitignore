@@ -1,0 +1,17 @@
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Node
+node_modules/
+dist/
+*.log
+
+# Brainstorming mockups (local only)
+.superpowers/
