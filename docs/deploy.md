@@ -49,30 +49,34 @@ GitHub serves with `Access-Control-Allow-Origin: *` and caches for 5 minutes.
 
 ## 3. VPS cron (once)
 
-```bash
-# 1. Two clones: main for the script and camera list, status for publishing.
-sudo mkdir -p /srv && cd /srv
-git clone --single-branch --branch main   git@github.com:apikdech/cctv.git cctv
-git clone --single-branch --branch status git@github.com:apikdech/cctv.git cctv-status
+No Docker and no pip installs: `publish_status.sh` needs `git`, `flock` and
+Python 3.9+ — all present on Debian 11+/Ubuntu 22.04+ — plus a GitHub token.
+The clone is machine-owned: the script discards local edits on every run.
 
-# 2. A repo-scoped write key (add the .pub to Settings → Deploy keys, write access).
-ssh-keygen -t ed25519 -N "" -C "cctv-status-cron" -f ~/.ssh/cctv-status
+```bash
+# 1. One clone; the script updates it and publishes from it.
+sudo git clone https://github.com/apikdech/cctv.git /srv/cctv
+
+# 2. A token that can write only this repo's contents.
+#    Fine-grained: Contents = Read and write.  Classic: `repo` scope.
+sudo sh -c 'umask 077; echo GITHUB_TOKEN=github_pat_xxx > /etc/cctv-status.env'
+
+# 3. First publish, ~15 minutes; prints progress every 50 cameras.
+sudo /srv/cctv/publish_status.sh
 ```
 
 Then, every 6 hours:
 
 ```cron
-0 */6 * * * flock -n /tmp/cctv-probe.lock sh -c 'cd /srv/cctv && git pull -q --ff-only && uv run python probe_status.py && cp status.json /srv/cctv-status/status.json && cd /srv/cctv-status && git add status.json && git commit -qm "status $(date -u +%FT%TZ)" ; git push -q'
+0 */6 * * * /srv/cctv/publish_status.sh >> /var/log/cctv-status.log 2>&1
 ```
 
-A run with no changes exits non-zero at `git commit`; that is expected. The
-script probes three streams at a time with a plain `User-Agent`, and writes the
-file atomically so a killed run cannot publish a half-written one.
-
-`flock -n` is not decoration: worst case (every stream hanging until the 10s
-timeout) a 714-camera sweep takes ~40 minutes. That fits inside a 6-hour
-interval, but the lock still keeps a hung run from overlapping the next one and
-doubling the request rate.
+The script fetches `main`, probes three streams at a time with a plain
+`User-Agent`, writes `status.json` atomically, commits it to the `status`
+branch and pushes with the token from the environment. `flock` inside the
+script keeps a hung sweep from overlapping the next one: worst case (every
+stream hanging until the 10s timeout) a 714-camera sweep takes ~40 minutes,
+which fits inside a 6-hour interval but not inside a shorter one.
 
 ## How the site behaves
 
