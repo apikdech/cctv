@@ -11,6 +11,7 @@
   import { onMount } from 'svelte';
   import type { Feature, FeatureCollection, Point } from 'geojson';
   import { toFeatureCollection } from '../lib/geo';
+  import { MAP_STYLE, type Theme } from '../lib/theme';
   import type { Camera, LivenessMap } from '../lib/types';
 
   // Vite pre-bundles maplibre in dev, which breaks its relative worker URL.
@@ -21,20 +22,26 @@
     liveness: LivenessMap;
     selected: Camera | null;
     hoveredId: string | null;
+    theme: Theme;
     onselect: (id: string) => void;
     ongroup: (ids: string[]) => void;
   }
-  let { cameras, liveness, selected, hoveredId, onselect, ongroup }: Props = $props();
+  let { cameras, liveness, selected, hoveredId, theme, onselect, ongroup }: Props = $props();
 
-  const STYLE = 'https://tiles.openfreemap.org/styles/liberty';
   const MAX_ZOOM = 19;
-  const COLOR = { kota: '#2563eb', prov: '#0d9488', removed: '#ea580c', dead: '#9ca3af', ring: '#111827' };
+  // Category colours mirror the --kota/--prov/--removed/--dead variables in
+  // app.css; keep the two in step.
+  const PALETTE = {
+    light: { kota: '#2563eb', prov: '#0d9488', removed: '#ea580c', dead: '#9ca3af', ring: '#111827', stroke: '#fff', label: '#111827', halo: '#fff' },
+    dark: { kota: '#3b82f6', prov: '#14b8a6', removed: '#f97316', dead: '#6b7280', ring: '#e5e7eb', stroke: '#111827', label: '#e5e7eb', halo: '#111827' },
+  } satisfies Record<Theme, Record<string, string>>;
 
   let container: HTMLDivElement;
   let map: MapLibre | undefined;
   let ready = $state(false);
   let fitted = false;
   let lastFlownId: string | null = null;
+  let styledTheme: Theme | null = null;
 
   function source(id: string): GeoJSONSource {
     return map!.getSource(id) as GeoJSONSource;
@@ -46,7 +53,8 @@
 
   const empty: FeatureCollection = { type: 'FeatureCollection', features: [] };
 
-  function addLayers(m: MapLibre) {
+  function addLayers(m: MapLibre, t: Theme) {
+    const COLOR = PALETTE[t];
     m.addSource('cameras', {
       type: 'geojson',
       data: empty,
@@ -78,7 +86,7 @@
         ],
         'circle-radius': ['step', ['get', 'point_count'], 15, 10, 19, 30, 24],
         'circle-stroke-width': 2,
-        'circle-stroke-color': '#fff',
+        'circle-stroke-color': COLOR.stroke,
       },
     });
     m.addLayer({
@@ -103,7 +111,7 @@
         'circle-color': ['match', ['get', 'kind'], 'removed', COLOR.removed, 'dead', COLOR.dead, 'prov', COLOR.prov, COLOR.kota],
         'circle-radius': 7,
         'circle-stroke-width': 2,
-        'circle-stroke-color': '#fff',
+        'circle-stroke-color': COLOR.stroke,
       },
     });
     m.addLayer({
@@ -120,7 +128,7 @@
         'text-offset': [0, 0.9],
         'text-max-width': 10,
       },
-      paint: { 'text-color': COLOR.ring, 'text-halo-color': '#fff', 'text-halo-width': 1.5 },
+      paint: { 'text-color': COLOR.label, 'text-halo-color': COLOR.halo, 'text-halo-width': 1.5 },
     });
     m.addLayer({
       id: 'highlight',
@@ -174,14 +182,28 @@
   }
 
   onMount(() => {
-    const m = new MapLibre({ container, style: STYLE, maxZoom: MAX_ZOOM, center: [110.37, -7.8], zoom: 12 });
+    const m = new MapLibre({ container, style: MAP_STYLE[theme], maxZoom: MAX_ZOOM, center: [110.37, -7.8], zoom: 12 });
     map = m;
+    styledTheme = theme;
     m.on('load', () => {
-      addLayers(m);
+      addLayers(m, theme);
       addInteractions(m);
       ready = true;
     });
     return () => m.remove();
+  });
+
+  // A style swap drops custom sources and layers, so they are re-added once the
+  // new style loads. `fitted` and `lastFlownId` keep the view where it was.
+  $effect(() => {
+    if (!ready || theme === styledTheme) return;
+    styledTheme = theme;
+    ready = false;
+    map!.setStyle(MAP_STYLE[theme], { diff: false });
+    map!.once('style.load', () => {
+      addLayers(map!, theme);
+      ready = true;
+    });
   });
 
   $effect(() => {

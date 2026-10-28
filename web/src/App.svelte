@@ -216,7 +216,7 @@
   </aside>
 
   <div class="map" inert={wallOpen}>
-    <MapView cameras={visible} {liveness} {selected} {hoveredId} onselect={select} ongroup={showGroup} />
+    <MapView cameras={visible} {liveness} {selected} {hoveredId} {theme} onselect={select} ongroup={showGroup} />
     <div class="map-tools">
       {#if wallIds.length > 0 && !wallOpen}
         <button class="wall-open" type="button" onclick={openWall}>Wall ({wallIds.length})</button>
