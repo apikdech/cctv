@@ -5,7 +5,7 @@ import type { LivenessMap } from './types';
 export const STATUS_URL = 'https://raw.githubusercontent.com/apikdech/cctv/status/status.json';
 
 /** Twice the cron interval: older than this and the data is treated as absent. */
-export const MAX_AGE_MS = 30 * 60_000;
+export const MAX_AGE_MS = 12 * 60 * 60_000;
 
 type StatusFile = { generatedAt?: unknown; cameras?: unknown };
 

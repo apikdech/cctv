@@ -6,7 +6,7 @@ The app is a static Svelte build. Cloudflare Pages serves `web/dist` at
 Liveness is the only thing that changes often, so it is published separately:
 
 ```
-VPS cron (15 min)                    GitHub                    Browser
+VPS cron (6 h)                       GitHub                    Browser
 probe_status.py ──► status.json ──► status branch ──► raw.githubusercontent.com
                                                             │
                                               fetched once on load
@@ -59,10 +59,10 @@ git clone --single-branch --branch status git@github.com:apikdech/cctv.git cctv-
 ssh-keygen -t ed25519 -N "" -C "cctv-status-cron" -f ~/.ssh/cctv-status
 ```
 
-Then, every 15 minutes:
+Then, every 6 hours:
 
 ```cron
-*/15 * * * * flock -n /tmp/cctv-probe.lock sh -c 'cd /srv/cctv && git pull -q --ff-only && uv run python probe_status.py && cp status.json /srv/cctv-status/status.json && cd /srv/cctv-status && git add status.json && git commit -qm "status $(date -u +%FT%TZ)" ; git push -q'
+0 */6 * * * flock -n /tmp/cctv-probe.lock sh -c 'cd /srv/cctv && git pull -q --ff-only && uv run python probe_status.py && cp status.json /srv/cctv-status/status.json && cd /srv/cctv-status && git add status.json && git commit -qm "status $(date -u +%FT%TZ)" ; git push -q'
 ```
 
 A run with no changes exits non-zero at `git commit`; that is expected. The
@@ -70,16 +70,16 @@ script probes three streams at a time with a plain `User-Agent`, and writes the
 file atomically so a killed run cannot publish a half-written one.
 
 `flock -n` is not decoration: worst case (every stream hanging until the 10s
-timeout) a 714-camera sweep takes ~40 minutes, longer than the 15-minute
-interval. Without the lock, cron would start a second sweep on top of the first
-and double the request rate.
+timeout) a 714-camera sweep takes ~40 minutes. That fits inside a 6-hour
+interval, but the lock still keeps a hung run from overlapping the next one and
+doubling the request rate.
 
 ## How the site behaves
 
 - On load it merges the status file over the 10-minute localStorage cache and
   only probes from the browser for cameras the file does not cover — up to all
   714 if the file is stale, which is the old behaviour at four times the size.
-- A file that is missing, malformed, or older than 30 minutes (twice the cron
+- A file that is missing, malformed, or older than 12 hours (twice the cron
   interval) is ignored, and the browser probes as before. So a dead VPS
   degrades to today's behaviour rather than showing stale status.
 - Opening a camera still play-tests the real stream and overrides the file.
@@ -98,6 +98,6 @@ curl -sI https://cctv-jogja.pages.dev | head -5
   cameras plus 542 mappable province cameras. Keeping concurrency at 3–4 holds
   the request *rate* unchanged; the sweep just takes longer (a minute or two,
   ~40 minutes if every stream times out).
-  Keep the interval at 15 minutes or longer.
+  Keep the interval at 6 hours.
 - All probe traffic comes from one IP; if either source starts refusing it,
   lengthen the interval rather than raising concurrency.
