@@ -25,6 +25,15 @@ Link straight to a camera with `#cam=<dataset>-<ref>`, e.g.
 `http://localhost:5173/#cam=prov-1915`. Old numeric links (`#cam=14`) still open
 the city camera of that number.
 
+## Watch several at once
+
+Press **Add to wall** on any row in the list (or in the player) to collect up to
+8 cameras. **Wall (n)** at the top-right of the map opens them as a grid filling
+the window. `M` goes back to the map, `F` or a double-click makes one tile
+fullscreen, drag a tile onto another to swap places, and ✕ removes it. The wall
+lives in the URL — `#wall=kota-1,prov-1915` — so a reload or a shared link
+reopens the same cameras. Streams run only while the wall is open.
+
 ## Refresh the data
 
 The app reads the bundled `web/public/cameras.json`. To rebuild it:
@@ -49,4 +58,5 @@ cd web && pnpm test && pnpm check   # app
 These are city government servers. The Wayback Machine rate-limits hard, and
 the app checks each stream from your browser. Those results are cached for
 10 minutes, so reloading doesn't re-check all ~170 cameras. Don't crawl in a
-loop.
+loop. On the wall, all open cameras stream at once — keep the wall to a few
+while testing.

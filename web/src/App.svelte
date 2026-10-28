@@ -3,11 +3,13 @@
   import CameraList from './components/CameraList.svelte';
   import MapView from './components/MapView.svelte';
   import Player from './components/Player.svelte';
+  import Wall from './components/Wall.svelte';
   import { nearest } from './lib/geo';
-  import { formatHash, resolveHashCamera } from './lib/hash';
+  import { formatHash, formatWallHash, resolveHashCamera, resolveWallHash } from './lib/hash';
   import { applyResults, checkAll, loadCache, probe, saveCache, type LivenessCache } from './lib/liveness';
   import { visibleCameras } from './lib/search';
   import { loadStatus } from './lib/status';
+  import { addToWall, removeFromWall, swapInWall } from './lib/wall';
   import type { Camera, LivenessMap, Toggles } from './lib/types';
 
   type Status = 'alive' | 'dead';
@@ -19,6 +21,8 @@
   let selectedId: string | null = $state(null);
   let hoveredId: string | null = $state(null);
   let group: string[] | null = $state(null);
+  let wallIds: string[] = $state([]);
+  let wallOpen = $state(false);
   let cache: LivenessCache = {};
   // Actual playback beats a background probe that finishes later.
   const playerResolved = new Set<string>();
@@ -27,6 +31,7 @@
   const selected = $derived(cameras.find((c) => c.id === selectedId) ?? null);
   const nearby = $derived(selected ? nearest(visible, selected, 5) : []);
   const groupCameras = $derived(group ? cameras.filter((c) => group!.includes(c.id)) : []);
+  const wallCameras = $derived(wallIds.map((id) => cameras.find((c) => c.id === id)).filter((c): c is Camera => !!c));
 
   function storage(): Storage | null {
     try {
@@ -54,10 +59,14 @@
     history.replaceState(null, '', formatHash(id));
   }
 
+  function listUrl(): string {
+    return selectedId ? formatHash(selectedId) : location.pathname + location.search;
+  }
+
   function back() {
     selectedId = null;
     hoveredId = null;
-    history.replaceState(null, '', location.pathname + location.search);
+    history.replaceState(null, '', listUrl());
   }
 
   function showGroup(ids: string[]) {
@@ -65,7 +74,44 @@
     group = ids;
   }
 
+  function openWall() {
+    wallOpen = true;
+    history.replaceState(null, '', formatWallHash(wallIds));
+  }
+
+  function closeWall() {
+    if (!wallOpen) return;
+    wallOpen = false;
+    history.replaceState(null, '', listUrl());
+  }
+
+  function toggleWall(id: string) {
+    const next = wallIds.includes(id) ? removeFromWall(wallIds, id) : addToWall(wallIds, id);
+    if (next === wallIds) return;
+    wallIds = next;
+    if (!wallOpen) return;
+    if (wallIds.length === 0) closeWall();
+    else history.replaceState(null, '', formatWallHash(wallIds));
+  }
+
+  function swapTiles(fromId: string, toId: string) {
+    const next = swapInWall(wallIds, fromId, toId);
+    if (next === wallIds) return;
+    wallIds = next;
+    if (wallOpen) history.replaceState(null, '', formatWallHash(wallIds));
+  }
+
   function syncFromHash() {
+    const wall = resolveWallHash(location.hash, cameras);
+    if (wall.length) {
+      wallIds = wall;
+      wallOpen = true;
+      return;
+    }
+    // Not a wall link: the user left the wall, if they were on it.
+    if (wallOpen) wallOpen = false;
+    // A wall link with nothing usable is not a camera link either; drop it.
+    if (location.hash.startsWith('#wall=')) history.replaceState(null, '', location.pathname + location.search);
     const cam = resolveHashCamera(location.hash, cameras);
     if (cam) select(cam.id);
     else selectedId = null;
@@ -112,6 +158,8 @@
         onselect={select}
         onhover={(id) => (hoveredId = id)}
         onliveness={recordPlayback}
+        wall={wallIds}
+        onwall={toggleWall}
       />
     {:else if group}
       <CameraList
@@ -123,6 +171,8 @@
         ontoggle={(t) => (toggles = t)}
         onselect={select}
         onhover={(id) => (hoveredId = id)}
+        wall={wallIds}
+        onwall={toggleWall}
       />
     {:else}
       <CameraList
@@ -132,13 +182,28 @@
         ontoggle={(t) => (toggles = t)}
         onselect={select}
         onhover={(id) => (hoveredId = id)}
+        wall={wallIds}
+        onwall={toggleWall}
       />
     {/if}
   </aside>
 
   <div class="map">
     <MapView cameras={visible} {liveness} {selected} {hoveredId} onselect={select} ongroup={showGroup} />
+    {#if wallIds.length > 0 && !wallOpen}
+      <button class="wall-open" type="button" onclick={openWall}>Wall ({wallIds.length})</button>
+    {/if}
   </div>
+
+  {#if wallOpen}
+    <Wall
+      cameras={wallCameras}
+      onclose={closeWall}
+      onremove={toggleWall}
+      onswap={swapTiles}
+      onliveness={recordPlayback}
+    />
+  {/if}
 </div>
 
 <style>
@@ -153,7 +218,25 @@
     background: #fff;
   }
   .map {
+    position: relative;
     min-height: 0;
+  }
+  .wall-open {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 6px 12px;
+    border: 0;
+    border-radius: 6px;
+    background: #111827;
+    color: #fff;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+  .wall-open:hover {
+    background: #1f2937;
   }
   @media (max-width: 640px) {
     .app {
