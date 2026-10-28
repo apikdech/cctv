@@ -4,12 +4,14 @@
 # Run from cron every 6 hours; see docs/deploy.md.
 set -euo pipefail
 
-[ -r /etc/cctv-status.env ] && . /etc/cctv-status.env
+for f in "${CCTV_ENV_FILE:-}" /etc/cctv-status.env "${HOME:-/nonexistent}/.config/cctv-status.env"; do
+  if [ -n "$f" ] && [ -r "$f" ]; then . "$f"; break; fi
+done
 : "${GITHUB_TOKEN:?GITHUB_TOKEN is not set (see docs/deploy.md)}"
 
 REPO=${GITHUB_REPO:-apikdech/cctv}
 BRANCH=${STATUS_BRANCH:-status}
-WORK_DIR=${WORK_DIR:-/srv/cctv}
+WORK_DIR=${WORK_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}
 PYTHON=${PYTHON:-python3}
 
 cd "$WORK_DIR"

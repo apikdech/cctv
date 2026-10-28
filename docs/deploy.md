@@ -51,25 +51,30 @@ GitHub serves with `Access-Control-Allow-Origin: *` and caches for 5 minutes.
 
 No Docker and no pip installs: `publish_status.sh` needs `git`, `flock` and
 Python 3.9+ — all present on Debian 11+/Ubuntu 22.04+ — plus a GitHub token.
-The clone is machine-owned: the script discards local edits on every run.
+It publishes from the clone it lives in, and discards local edits there.
 
 ```bash
-# 1. One clone; the script updates it and publishes from it.
-sudo git clone https://github.com/apikdech/cctv.git /srv/cctv
+# 1. Clone once, wherever you want it.
+git clone https://github.com/apikdech/cctv.git ~/cctv
 
 # 2. A token that can write only this repo's contents.
 #    Fine-grained: Contents = Read and write.  Classic: `repo` scope.
-sudo sh -c 'umask 077; echo GITHUB_TOKEN=github_pat_xxx > /etc/cctv-status.env'
+mkdir -p ~/.config
+(umask 077; echo GITHUB_TOKEN=github_pat_xxx > ~/.config/cctv-status.env)
 
 # 3. First publish, ~15 minutes; prints progress every 50 cameras.
-sudo /srv/cctv/publish_status.sh
+~/cctv/publish_status.sh
 ```
 
-Then, every 6 hours:
+Then, every 6 hours, in your own crontab (`crontab -e`):
 
 ```cron
-0 */6 * * * /srv/cctv/publish_status.sh >> /var/log/cctv-status.log 2>&1
+0 */6 * * * ~/cctv/publish_status.sh >> ~/cctv-status.log 2>&1
 ```
+
+Running it as root also works: use `/srv/cctv` and put the token in
+`/etc/cctv-status.env` instead. The script checks `CCTV_ENV_FILE`, then
+`/etc/cctv-status.env`, then `~/.config/cctv-status.env`.
 
 The script fetches `main`, probes three streams at a time with a plain
 `User-Agent`, writes `status.json` atomically, commits it to the `status`
