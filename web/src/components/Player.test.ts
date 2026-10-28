@@ -100,3 +100,15 @@ it('fullscreen button exits fullscreen when already fullscreen', async () => {
     delete (document as any).exitFullscreen;
   }
 });
+
+it('offers Add to wall for the playing camera', async () => {
+  const onwall = vi.fn();
+  render(Player, { ...props(), wall: [], onwall });
+  await userEvent.click(screen.getByText('Add to wall'));
+  expect(onwall).toHaveBeenCalledWith('kota-1');
+});
+
+it('marks the playing camera as already on the wall', () => {
+  render(Player, { ...props(), wall: ['kota-1'], onwall: vi.fn() });
+  expect(screen.getByText('On wall')).toBeInTheDocument();
+});

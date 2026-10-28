@@ -1,7 +1,10 @@
 <script lang="ts">
+  import { onDestroy } from 'svelte';
   import CameraRow from './CameraRow.svelte';
+  import WallButton from './WallButton.svelte';
   import { displayName, livenessOf } from '../lib/search';
   import { attachStream } from '../lib/stream';
+  import { MAX_WALL } from '../lib/wall';
   import type { Camera, LivenessMap } from '../lib/types';
 
   interface Props {
@@ -12,8 +15,12 @@
     onselect: (id: string) => void;
     onhover: (id: string | null) => void;
     onliveness: (id: string, status: 'alive' | 'dead') => void;
+    wall?: string[];
+    onwall?: (id: string) => void;
   }
-  let { camera, nearby, liveness, onback, onselect, onhover, onliveness }: Props = $props();
+  let { camera, nearby, liveness, onback, onselect, onhover, onliveness, wall, onwall }: Props = $props();
+
+  const wallFull = $derived((wall?.length ?? 0) >= MAX_WALL);
 
   let wrapper: HTMLDivElement;
   let video: HTMLVideoElement;
@@ -68,13 +75,28 @@
     <h2>{displayName(camera.title)}</h2>
     {#if place}<p class="sub">{place}</p>{/if}
     <p class="sub">{source}</p>
+    {#if onwall}
+      <div class="wallrow">
+        <WallButton inWall={wall?.includes(camera.id) ?? false} full={wallFull} onclick={() => onwall(camera.id)} />
+      </div>
+    {/if}
   </div>
 
   {#if nearby.length}
     <h3>Nearby</h3>
     <ul>
       {#each nearby as cam (cam.id)}
-        <li><CameraRow camera={cam} liveness={livenessOf(liveness, cam.id)} {onselect} {onhover} /></li>
+        <li>
+          <CameraRow
+            camera={cam}
+            liveness={livenessOf(liveness, cam.id)}
+            {onselect}
+            {onhover}
+            inWall={wall?.includes(cam.id) ?? false}
+            {wallFull}
+            {onwall}
+          />
+        </li>
       {/each}
     </ul>
   {/if}
@@ -156,6 +178,9 @@
     margin: 2px 0;
     font-size: 13px;
     color: #6b7280;
+  }
+  .wallrow {
+    margin-top: 8px;
   }
   ul {
     margin: 0;

@@ -50,3 +50,29 @@ it('group mode shows title and back button', async () => {
   await userEvent.click(screen.getByText('← back to list'));
   expect(onback).toHaveBeenCalled();
 });
+
+it('shows Add to wall and reports the id', async () => {
+  const onwall = vi.fn();
+  const onselect = vi.fn();
+  render(CameraList, { ...base, onselect, cameras: [cam('kota-1', 'Simpang Tugu')], wall: [], onwall });
+  await userEvent.click(screen.getByText('Add to wall'));
+  expect(onwall).toHaveBeenCalledWith('kota-1');
+  expect(onselect).not.toHaveBeenCalled();
+});
+
+it('marks cameras already on the wall', () => {
+  render(CameraList, { ...base, cameras: [cam('kota-1', 'A')], wall: ['kota-1'], onwall: vi.fn() });
+  expect(screen.getByText('On wall')).toBeInTheDocument();
+});
+
+it('a full wall disables Add for others but not removal', () => {
+  const wall = [...Array.from({ length: 7 }, (_, i) => `other-${i}`), 'kota-2'];
+  render(CameraList, { ...base, cameras: [cam('kota-1', 'A'), cam('kota-2', 'B')], wall, onwall: vi.fn() });
+  expect(screen.getByText('Wall is full')).toBeDisabled();
+  expect(screen.getByText('On wall')).toBeEnabled();
+});
+
+it('shows no wall button without onwall', () => {
+  render(CameraList, { ...base, cameras: [cam('kota-1', 'A')] });
+  expect(screen.queryByText('Add to wall')).toBeNull();
+});

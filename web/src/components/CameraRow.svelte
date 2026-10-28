@@ -1,4 +1,5 @@
 <script lang="ts">
+  import WallButton from './WallButton.svelte';
   import { displayName } from '../lib/search';
   import type { Camera, Liveness } from '../lib/types';
 
@@ -7,8 +8,11 @@
     liveness: Liveness;
     onselect: (id: string) => void;
     onhover: (id: string | null) => void;
+    inWall?: boolean;
+    wallFull?: boolean;
+    onwall?: (id: string) => void;
   }
-  let { camera, liveness, onselect, onhover }: Props = $props();
+  let { camera, liveness, onselect, onhover, inWall = false, wallFull = false, onwall }: Props = $props();
 
   const kind = $derived(
     liveness === 'dead' ? 'dead' : camera.source === 'removed' ? 'removed' : camera.dataset,
@@ -21,29 +25,46 @@
   );
 </script>
 
-<button
-  class="row"
-  type="button"
-  onclick={() => onselect(camera.id)}
-  onmouseenter={() => onhover(camera.id)}
-  onmouseleave={() => onhover(null)}
-  onfocus={() => onhover(camera.id)}
-  onblur={() => onhover(null)}
->
-  <span class="dot {kind}"></span>
-  <span class="text">
-    <span class="name">{displayName(camera.title)}</span>
-    {#if place}<span class="sub">{place}</span>{/if}
-    <span class="sub status">{status}</span>
-  </span>
-</button>
+<div class="row">
+  <button
+    class="main"
+    type="button"
+    onclick={() => onselect(camera.id)}
+    onmouseenter={() => onhover(camera.id)}
+    onmouseleave={() => onhover(null)}
+    onfocus={() => onhover(camera.id)}
+    onblur={() => onhover(null)}
+  >
+    <span class="dot {kind}"></span>
+    <span class="text">
+      <span class="name">{displayName(camera.title)}</span>
+      {#if place}<span class="sub">{place}</span>{/if}
+      <span class="sub status">{status}</span>
+    </span>
+  </button>
+
+  {#if onwall}
+    <WallButton {inWall} full={wallFull} onclick={() => onwall(camera.id)} />
+  {/if}
+</div>
 
 <style>
   .row {
     display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-right: 10px;
+    border-radius: 6px;
+  }
+  .row:hover {
+    background: #f3f4f6;
+  }
+  .main {
+    display: flex;
+    flex: 1;
     gap: 10px;
     align-items: flex-start;
-    width: 100%;
+    min-width: 0;
     padding: 8px 12px;
     border: 0;
     background: none;
@@ -53,10 +74,9 @@
     cursor: pointer;
     border-radius: 6px;
   }
-  .row:hover,
-  .row:focus-visible {
-    background: #f3f4f6;
-    outline: none;
+  .main:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: -2px;
   }
   .dot {
     flex: none;

@@ -1,6 +1,7 @@
 <script lang="ts">
   import CameraRow from './CameraRow.svelte';
   import { livenessOf, searchCameras } from '../lib/search';
+  import { MAX_WALL } from '../lib/wall';
   import type { Camera, LivenessMap, Toggles } from '../lib/types';
 
   interface Props {
@@ -10,10 +11,14 @@
     ontoggle: (t: Toggles) => void;
     onselect: (id: string) => void;
     onhover: (id: string | null) => void;
+    wall?: string[];
+    onwall?: (id: string) => void;
     title?: string;
     onback?: () => void;
   }
-  let { cameras, liveness, toggles, ontoggle, onselect, onhover, title, onback }: Props = $props();
+  let { cameras, liveness, toggles, ontoggle, onselect, onhover, wall, onwall, title, onback }: Props = $props();
+
+  const wallFull = $derived((wall?.length ?? 0) >= MAX_WALL);
 
   let query = $state('');
   const shown = $derived(title ? cameras : searchCameras(cameras, query));
@@ -51,7 +56,17 @@
 
   <ul>
     {#each shown as camera (camera.id)}
-      <li><CameraRow {camera} liveness={livenessOf(liveness, camera.id)} {onselect} {onhover} /></li>
+      <li>
+        <CameraRow
+          {camera}
+          liveness={livenessOf(liveness, camera.id)}
+          {onselect}
+          {onhover}
+          inWall={wall?.includes(camera.id) ?? false}
+          {wallFull}
+          {onwall}
+        />
+      </li>
     {/each}
   </ul>
 </section>
