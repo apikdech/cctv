@@ -107,7 +107,7 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    max-width: calc(100% - 76px);
+    max-width: calc(100% - 44px);
     padding: 2px 7px;
     border-radius: 4px;
     background: rgba(0, 0, 0, 0.55);
@@ -156,8 +156,8 @@
   }
   .fs {
     position: absolute;
-    top: 6px;
-    right: 38px;
+    right: 6px;
+    bottom: 6px;
     width: 26px;
     height: 26px;
     border: 0;
