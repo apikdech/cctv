@@ -3,12 +3,14 @@
   import CameraList from './components/CameraList.svelte';
   import MapView from './components/MapView.svelte';
   import Player from './components/Player.svelte';
+  import Resizer from './components/Resizer.svelte';
   import ThemeButton from './components/ThemeButton.svelte';
   import Wall from './components/Wall.svelte';
   import { nearest } from './lib/geo';
   import { formatHash, formatWallHash, resolveHashCamera, resolveWallHash } from './lib/hash';
   import { applyResults, checkAll, loadCache, probe, saveCache, type LivenessCache } from './lib/liveness';
   import { visibleCameras } from './lib/search';
+  import { SHEET, SIDEBAR, clampSheet, clampSidebar, loadSize, saveSize } from './lib/size';
   import { loadStatus } from './lib/status';
   import { loadThemeChoice, nextChoice, prefersDarkQuery, resolveTheme, saveThemeChoice } from './lib/theme';
   import { addToWall, removeFromWall, swapInWall } from './lib/wall';
@@ -28,6 +30,10 @@
   let cache: LivenessCache = {};
   let themeChoice = $state(loadThemeChoice(storage()));
   let prefersDark = $state(false);
+  let panelWidth = $state(loadSize(storage(), SIDEBAR.key, SIDEBAR.fallback));
+  let sheetHeight = $state(loadSize(storage(), SHEET.key, SHEET.fallback));
+  let viewportWidth = $state(innerWidth);
+  let viewportHeight = $state(innerHeight);
   // Actual playback beats a background probe that finishes later.
   const playerResolved = new Set<string>();
 
@@ -42,6 +48,32 @@
   function cycleTheme() {
     themeChoice = nextChoice(themeChoice);
     saveThemeChoice(storage(), themeChoice);
+  }
+
+  function dragWidth(clientX: number) {
+    panelWidth = clampSidebar(clientX, viewportWidth);
+  }
+
+  function dragHeight(clientY: number) {
+    sheetHeight = clampSheet((viewportHeight - clientY) / viewportHeight, viewportHeight);
+  }
+
+  function savePanelWidth() {
+    saveSize(storage(), SIDEBAR.key, panelWidth);
+  }
+
+  function saveSheetHeight() {
+    saveSize(storage(), SHEET.key, sheetHeight);
+  }
+
+  function resetPanelWidth() {
+    panelWidth = SIDEBAR.fallback;
+    savePanelWidth();
+  }
+
+  function resetSheetHeight() {
+    sheetHeight = SHEET.fallback;
+    saveSheetHeight();
   }
 
   $effect(() => {
@@ -172,48 +204,62 @@
   });
 </script>
 
-<div class="app">
+<svelte:window bind:innerWidth={viewportWidth} bind:innerHeight={viewportHeight} />
+
+<div
+  class="app"
+  style="--panel-w: {clampSidebar(panelWidth, viewportWidth)}px; --sheet-h: {clampSheet(sheetHeight, viewportHeight) * 100}%"
+>
   <aside class="panel" inert={wallOpen}>
-    {#if selected}
-      {#if !wallOpen}
-        <Player
-          camera={selected}
-          {nearby}
+    <div class="grab-bar">
+      <Resizer axis="y" label="Resize panel" ondrag={dragHeight} ondragend={saveSheetHeight} onreset={resetSheetHeight} />
+    </div>
+    <div class="panel-body">
+      {#if selected}
+        {#if !wallOpen}
+          <Player
+            camera={selected}
+            {nearby}
+            {liveness}
+            onback={back}
+            onselect={select}
+            onhover={(id) => (hoveredId = id)}
+            onliveness={recordPlayback}
+            wall={wallIds}
+            onwall={toggleWall}
+          />
+        {/if}
+      {:else if group}
+        <CameraList
+          cameras={groupCameras}
           {liveness}
-          onback={back}
+          {toggles}
+          title={`${groupCameras.length} cameras here`}
+          onback={() => (group = null)}
+          ontoggle={(t) => (toggles = t)}
           onselect={select}
           onhover={(id) => (hoveredId = id)}
-          onliveness={recordPlayback}
+          wall={wallIds}
+          onwall={toggleWall}
+        />
+      {:else}
+        <CameraList
+          cameras={visible}
+          {liveness}
+          {toggles}
+          ontoggle={(t) => (toggles = t)}
+          onselect={select}
+          onhover={(id) => (hoveredId = id)}
           wall={wallIds}
           onwall={toggleWall}
         />
       {/if}
-    {:else if group}
-      <CameraList
-        cameras={groupCameras}
-        {liveness}
-        {toggles}
-        title={`${groupCameras.length} cameras here`}
-        onback={() => (group = null)}
-        ontoggle={(t) => (toggles = t)}
-        onselect={select}
-        onhover={(id) => (hoveredId = id)}
-        wall={wallIds}
-        onwall={toggleWall}
-      />
-    {:else}
-      <CameraList
-        cameras={visible}
-        {liveness}
-        {toggles}
-        ontoggle={(t) => (toggles = t)}
-        onselect={select}
-        onhover={(id) => (hoveredId = id)}
-        wall={wallIds}
-        onwall={toggleWall}
-      />
-    {/if}
+    </div>
   </aside>
+
+  <div class="divider">
+    <Resizer axis="x" label="Resize panel" ondrag={dragWidth} ondragend={savePanelWidth} onreset={resetPanelWidth} />
+  </div>
 
   <div class="map" inert={wallOpen}>
     <MapView cameras={visible} {liveness} {selected} {hoveredId} {theme} onselect={select} ongroup={showGroup} />
@@ -239,13 +285,22 @@
 <style>
   .app {
     display: grid;
-    grid-template-columns: 360px 1fr;
+    grid-template-columns: var(--panel-w) 6px 1fr;
     height: 100%;
   }
   .panel {
+    display: flex;
+    flex-direction: column;
     min-height: 0;
     border-right: 1px solid var(--border);
     background: var(--bg);
+  }
+  .panel-body {
+    flex: 1;
+    min-height: 0;
+  }
+  .grab-bar {
+    display: none;
   }
   .map {
     position: relative;
@@ -276,12 +331,19 @@
   @media (max-width: 640px) {
     .app {
       grid-template-columns: 1fr;
-      grid-template-rows: 1fr 45vh;
+      grid-template-rows: 1fr var(--sheet-h);
     }
     .panel {
       grid-row: 2;
       border-right: 0;
       border-top: 1px solid var(--border);
+    }
+    .divider {
+      display: none;
+    }
+    .grab-bar {
+      display: block;
+      flex: none;
     }
   }
 </style>

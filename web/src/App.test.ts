@@ -119,6 +119,14 @@ it('theme button cycles System → Light → Dark and applies it', async () => {
   expect(document.documentElement.dataset.theme).toBe('light');
 });
 
+it('restores a stored panel width, clamped to the window', async () => {
+  localStorage.setItem('cctv-panel-width', '900');
+  const { container } = render(App);
+  await screen.findByText('Simpang A');
+  expect((container.querySelector('.app') as HTMLElement).style.getPropertyValue('--panel-w')).toBe('704px');
+  expect(localStorage.getItem('cctv-panel-width')).toBe('900');
+});
+
 it('opening the wall tears down the single player underneath', async () => {
   const { container } = render(App);
   await userEvent.click(await screen.findByText('Simpang A'));
