@@ -32,8 +32,13 @@ def probe(url: str, *, timeout: float = TIMEOUT, open_url=urlopen) -> bool:
         return False
 
 
+def _sort_key(cam: dict) -> tuple[str, int, str]:
+    dataset, _, ref = str(cam["id"]).partition("-")
+    return (dataset, int(ref), "") if ref.isdigit() else ("", 0, dataset)
+
+
 def build_status(cameras: list[dict], probe_fn, generated_at: str) -> dict:
-    ordered = sorted(cameras, key=lambda c: int(c["id"]))
+    ordered = sorted(cameras, key=_sort_key)
     with ThreadPoolExecutor(max_workers=CONCURRENCY) as pool:
         results = list(pool.map(lambda c: bool(probe_fn(c["url"])), ordered))
     return {

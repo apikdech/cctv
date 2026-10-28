@@ -88,7 +88,9 @@ curl -sI https://cctv-jogja.pages.dev | head -5
 ## Limits worth knowing
 
 - Pages Free: 500 builds/month, one at a time. Only `main` builds.
-- Each sweep is 172 requests to the city server. Keep the interval at 15
-  minutes or longer, and keep concurrency at 3–4.
-- All probe traffic comes from one IP; if the city starts refusing it, lengthen
-  the interval rather than raising concurrency.
+- Each sweep is ~714 requests, to the city **and** province servers: 172 city
+  cameras plus 542 mappable province cameras. Keeping concurrency at 3–4 holds
+  the request *rate* unchanged; the sweep just takes longer (a minute or two).
+  Keep the interval at 15 minutes or longer.
+- All probe traffic comes from one IP; if either source starts refusing it,
+  lengthen the interval rather than raising concurrency.

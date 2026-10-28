@@ -47,8 +47,14 @@ def test_probe_sends_a_contactable_user_agent():
 
 
 def test_build_status_covers_every_camera_in_id_order():
-    out = build_status([cam(10), cam(2)], lambda url: True, "2026-10-28T06:00:00Z")
-    assert out == {"generatedAt": "2026-10-28T06:00:00Z", "cameras": {"2": "alive", "10": "alive"}}
+    out = build_status([cam("prov-2"), cam("kota-10"), cam("kota-2")], lambda url: True, "2026-10-28T06:00:00Z")
+    assert out == {"generatedAt": "2026-10-28T06:00:00Z",
+                   "cameras": {"kota-2": "alive", "kota-10": "alive", "prov-2": "alive"}}
+
+
+def test_build_status_keeps_unknown_shapes_working():
+    out = build_status([cam("14"), cam("kota-9")], lambda url: True, "t")
+    assert sorted(out["cameras"]) == ["14", "kota-9"]
 
 
 def test_build_status_marks_failures_dead():
