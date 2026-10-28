@@ -122,7 +122,7 @@
     background: none;
     font: inherit;
     font-size: 13px;
-    color: #2563eb;
+    color: var(--link);
     cursor: pointer;
   }
   .video {
@@ -184,7 +184,7 @@
   }
   .info {
     padding: 12px;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--border);
   }
   h2 {
     margin: 0 0 4px;
@@ -193,14 +193,14 @@
   h3 {
     margin: 12px 12px 4px;
     font-size: 13px;
-    color: #6b7280;
+    color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
   .sub {
     margin: 2px 0;
     font-size: 13px;
-    color: #6b7280;
+    color: var(--muted);
   }
   .wallrow {
     margin-top: 8px;

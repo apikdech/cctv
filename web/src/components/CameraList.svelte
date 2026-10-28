@@ -80,7 +80,7 @@
   }
   header {
     padding: 12px;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--border);
   }
   h2 {
     margin: 4px 0 8px;
@@ -90,13 +90,15 @@
     width: 100%;
     padding: 8px 10px;
     font: inherit;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--input-border);
     border-radius: 6px;
+    background: var(--bg);
+    color: inherit;
   }
   .count {
     margin: 8px 0;
     font-size: 12px;
-    color: #6b7280;
+    color: var(--muted);
   }
   .back {
     padding: 0;
@@ -104,7 +106,7 @@
     background: none;
     font: inherit;
     font-size: 13px;
-    color: #2563eb;
+    color: var(--link);
     cursor: pointer;
   }
   .toggles {
@@ -125,16 +127,16 @@
     border-radius: 50%;
   }
   .swatch.kota {
-    background: #2563eb;
+    background: var(--kota);
   }
   .swatch.prov {
-    background: #0d9488;
+    background: var(--prov);
   }
   .swatch.removed {
-    background: #ea580c;
+    background: var(--removed);
   }
   .swatch.dead {
-    background: #9ca3af;
+    background: var(--dead);
   }
   ul {
     flex: 1;

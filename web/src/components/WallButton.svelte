@@ -24,26 +24,26 @@
   .wall {
     flex: none;
     padding: 3px 8px;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--input-border);
     border-radius: 999px;
-    background: #fff;
+    background: var(--bg);
     font: inherit;
     font-size: 11px;
-    color: #374151;
+    color: var(--text);
     white-space: nowrap;
     cursor: pointer;
   }
   .wall:hover:not(:disabled) {
-    border-color: #2563eb;
-    color: #2563eb;
+    border-color: var(--accent);
+    color: var(--accent);
   }
   .wall.on {
-    border-color: #2563eb;
-    background: #2563eb;
-    color: #fff;
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--chip-text);
   }
   .wall:disabled {
-    color: #9ca3af;
+    color: var(--disabled);
     cursor: not-allowed;
   }
 </style>

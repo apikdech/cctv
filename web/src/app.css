@@ -4,6 +4,46 @@
   box-sizing: border-box;
 }
 
+:root {
+  color-scheme: light;
+  --bg: #fff;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --input-border: #d1d5db;
+  --hover: #f3f4f6;
+  --link: #2563eb;
+  --accent: #2563eb;
+  --disabled: #9ca3af;
+  --chip-bg: #111827;
+  --chip-text: #fff;
+  --chip-hover: #1f2937;
+  --kota: #2563eb;
+  --prov: #0d9488;
+  --removed: #ea580c;
+  --dead: #9ca3af;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #111827;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --border: #1f2937;
+  --input-border: #374151;
+  --hover: #1f2937;
+  --link: #60a5fa;
+  --accent: #3b82f6;
+  --disabled: #4b5563;
+  --chip-bg: #e5e7eb;
+  --chip-text: #111827;
+  --chip-hover: #d1d5db;
+  --kota: #3b82f6;
+  --prov: #14b8a6;
+  --removed: #f97316;
+  --dead: #6b7280;
+}
+
 html,
 body,
 #app {
@@ -13,6 +53,41 @@ body,
 
 body {
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  color: #111827;
-  background: #fff;
+  color: var(--text);
+  background: var(--bg);
+}
+
+/* Map chrome follows the theme too. */
+:root[data-theme='dark'] .maplibregl-popup-content {
+  background: var(--bg);
+  color: var(--text);
+}
+
+:root[data-theme='dark'] .maplibregl-popup-anchor-top .maplibregl-popup-tip,
+:root[data-theme='dark'] .maplibregl-popup-anchor-top-left .maplibregl-popup-tip,
+:root[data-theme='dark'] .maplibregl-popup-anchor-top-right .maplibregl-popup-tip {
+  border-bottom-color: var(--bg);
+}
+
+:root[data-theme='dark'] .maplibregl-popup-anchor-bottom .maplibregl-popup-tip,
+:root[data-theme='dark'] .maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,
+:root[data-theme='dark'] .maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip {
+  border-top-color: var(--bg);
+}
+
+:root[data-theme='dark'] .maplibregl-popup-anchor-left .maplibregl-popup-tip {
+  border-right-color: var(--bg);
+}
+
+:root[data-theme='dark'] .maplibregl-popup-anchor-right .maplibregl-popup-tip {
+  border-left-color: var(--bg);
+}
+
+:root[data-theme='dark'] .maplibregl-ctrl-attrib {
+  background: rgba(17, 24, 39, 0.8);
+  color: var(--muted);
+}
+
+:root[data-theme='dark'] .maplibregl-ctrl-attrib a {
+  color: var(--link);
 }

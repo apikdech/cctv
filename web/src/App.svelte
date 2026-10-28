@@ -216,8 +216,8 @@
   }
   .panel {
     min-height: 0;
-    border-right: 1px solid #e5e7eb;
-    background: #fff;
+    border-right: 1px solid var(--border);
+    background: var(--bg);
   }
   .map {
     position: relative;
@@ -230,15 +230,15 @@
     padding: 6px 12px;
     border: 0;
     border-radius: 6px;
-    background: #111827;
-    color: #fff;
+    background: var(--chip-bg);
+    color: var(--chip-text);
     font: inherit;
     font-size: 13px;
     cursor: pointer;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
   }
   .wall-open:hover {
-    background: #1f2937;
+    background: var(--chip-hover);
   }
   @media (max-width: 640px) {
     .app {
@@ -248,7 +248,7 @@
     .panel {
       grid-row: 2;
       border-right: 0;
-      border-top: 1px solid #e5e7eb;
+      border-top: 1px solid var(--border);
     }
   }
 </style>

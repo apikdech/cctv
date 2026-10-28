@@ -57,7 +57,7 @@
     border-radius: 6px;
   }
   .row:hover {
-    background: #f3f4f6;
+    background: var(--hover);
   }
   .main {
     display: flex;
@@ -75,7 +75,7 @@
     border-radius: 6px;
   }
   .main:focus-visible {
-    outline: 2px solid #2563eb;
+    outline: 2px solid var(--accent);
     outline-offset: -2px;
   }
   .dot {
@@ -96,18 +96,18 @@
   }
   .sub {
     font-size: 12px;
-    color: #6b7280;
+    color: var(--muted);
   }
   .official {
-    background: #2563eb;
+    background: var(--kota);
   }
   .removed {
-    background: #ea580c;
+    background: var(--removed);
   }
   .prov {
-    background: #0d9488;
+    background: var(--prov);
   }
   .dead {
-    background: #9ca3af;
+    background: var(--dead);
   }
 </style>
