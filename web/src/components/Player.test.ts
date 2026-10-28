@@ -80,3 +80,17 @@ it('fullscreen button requests fullscreen', async () => {
   await userEvent.click(screen.getByLabelText('Fullscreen'));
   expect(req).toHaveBeenCalled();
 });
+
+it('fullscreen button exits fullscreen when already fullscreen', async () => {
+  const exit = vi.fn().mockResolvedValue(undefined);
+  Object.defineProperty(document, 'fullscreenElement', { configurable: true, get: () => document.body });
+  document.exitFullscreen = exit;
+  try {
+    render(Player, props());
+    await userEvent.click(screen.getByLabelText('Fullscreen'));
+    expect(exit).toHaveBeenCalled();
+  } finally {
+    delete (document as any).fullscreenElement;
+    delete (document as any).exitFullscreen;
+  }
+});

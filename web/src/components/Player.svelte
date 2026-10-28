@@ -88,7 +88,8 @@
   });
 
   function fullscreen() {
-    wrapper.requestFullscreen?.().catch(() => {});
+    if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
+    else wrapper.requestFullscreen?.().catch(() => {});
   }
 
   function onkeydown(e: KeyboardEvent) {
