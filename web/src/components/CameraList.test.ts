@@ -15,7 +15,16 @@ it('filters as you type and shows the count', async () => {
   await userEvent.type(screen.getByPlaceholderText(/Search camera/), 'malioboro');
   expect(screen.getByText('1 cameras')).toBeInTheDocument();
   expect(screen.getByText('Malioboro Mall Utara')).toBeInTheDocument();
-  expect(screen.getByText('Removed · dead')).toBeInTheDocument();
+  expect(screen.getByText('Kota · Removed · dead')).toBeInTheDocument();
+});
+
+it('names the dataset and the owner', () => {
+  const city = cam('kota-1', 'Simpang Tugu');
+  const prov = { ...cam('prov-2', 'RingRoad', 'official', '', 'prov'), owner: 'Dinas Perhubungan DIY' } as Camera;
+  render(CameraList, { ...base, liveness: { 'kota-1': 'alive', 'prov-2': 'alive' }, cameras: [city, prov] });
+  expect(screen.getByText('Kota · Official')).toBeInTheDocument();
+  expect(screen.getByText('Provinsi · Official')).toBeInTheDocument();
+  expect(screen.getByText('Dinas Perhubungan DIY')).toBeInTheDocument();
 });
 
 it('click selects, hover reports, toggle emits new toggles', async () => {

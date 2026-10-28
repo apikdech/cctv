@@ -31,7 +31,13 @@ it('reports alive on manifest, dead + message on fatal error', async () => {
   instances[0].emit('hlsError', { fatal: true });
   expect(p.onliveness).toHaveBeenCalledWith('kota-1', 'dead');
   expect(await screen.findByText("This camera isn't streaming right now")).toBeInTheDocument();
-  expect(screen.getByText('Removed · last seen 2025-09-01')).toBeInTheDocument();
+  expect(screen.getByText('Kota · Removed · last seen 2025-09-01')).toBeInTheDocument();
+});
+
+it('names the dataset and agency for a province camera', () => {
+  const province = { ...cam('prov-5'), dataset: 'prov' as const, source: 'official' as const, lastSeen: null, owner: 'Dinas Perhubungan DIY' };
+  render(Player, { ...props(), camera: province });
+  expect(screen.getByText('Provinsi · Dinas Perhubungan DIY')).toBeInTheDocument();
 });
 
 it('ignores events from a previous camera', async () => {

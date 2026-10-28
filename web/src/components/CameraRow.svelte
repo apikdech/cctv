@@ -10,9 +10,13 @@
   }
   let { camera, liveness, onselect, onhover }: Props = $props();
 
-  const kind = $derived(liveness === 'dead' ? 'dead' : camera.source);
+  const kind = $derived(
+    liveness === 'dead' ? 'dead' : camera.source === 'removed' ? 'removed' : camera.dataset,
+  );
+  const dataset = $derived(camera.dataset === 'prov' ? 'Provinsi' : 'Kota');
+  const place = $derived(camera.kecamatan || camera.owner);
   const status = $derived(
-    (camera.source === 'official' ? 'Official' : 'Removed') +
+    `${dataset} · ${camera.source === 'official' ? 'Official' : 'Removed'}` +
       (liveness === 'dead' ? ' · dead' : liveness === 'checking' ? ' · checking…' : ''),
   );
 </script>
@@ -29,7 +33,7 @@
   <span class="dot {kind}"></span>
   <span class="text">
     <span class="name">{displayName(camera.title)}</span>
-    {#if camera.kecamatan}<span class="sub">{camera.kecamatan}</span>{/if}
+    {#if place}<span class="sub">{place}</span>{/if}
     <span class="sub status">{status}</span>
   </span>
 </button>

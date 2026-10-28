@@ -22,7 +22,13 @@
   let failed = $state(false);
 
   const place = $derived([camera.kecamatan, camera.kelurahan].filter(Boolean).join(' · '));
-  const source = $derived(camera.source === 'official' ? 'Official' : `Removed · last seen ${camera.lastSeen}`);
+  const source = $derived(
+    camera.dataset === 'prov'
+      ? `Provinsi · ${camera.owner || 'Official'}`
+      : camera.source === 'official'
+        ? 'Kota · Official'
+        : `Kota · Removed · last seen ${camera.lastSeen}`,
+  );
 
   $effect(() => {
     const id = camera.id;
