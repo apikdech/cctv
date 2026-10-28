@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Hls from 'hls.js';
   import CameraRow from './CameraRow.svelte';
   import { displayName, livenessOf } from '../lib/search';
+  import { attachStream } from '../lib/stream';
   import type { Camera, LivenessMap } from '../lib/types';
 
   interface Props {
@@ -14,8 +14,6 @@
     onliveness: (id: string, status: 'alive' | 'dead') => void;
   }
   let { camera, nearby, liveness, onback, onselect, onhover, onliveness }: Props = $props();
-
-  const STALL_MS = 15_000;
 
   let wrapper: HTMLDivElement;
   let video: HTMLVideoElement;
@@ -35,62 +33,11 @@
     const url = camera.url;
     failed = false;
 
-    // Events from a stream we've already left must not touch the new camera.
-    let active = true;
-    const report = (status: 'alive' | 'dead') => {
-      if (!active) return;
+    return attachStream(video, url, (status) => {
+      if (status === 'unsupported') failed = true;
       if (status === 'dead') failed = true;
-      onliveness(id, status);
-    };
-    const play = () => video.play().catch(() => {});
-
-    // A stream can serve a playlist yet never deliver frames; don't leave a black box.
-    const stall = setTimeout(() => report('dead'), STALL_MS);
-    const playing = () => clearTimeout(stall);
-    video.addEventListener('playing', playing);
-    const stop = () => {
-      active = false;
-      clearTimeout(stall);
-      video.removeEventListener('playing', playing);
-    };
-
-    if (Hls.isSupported()) {
-      const hls = new Hls();
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        play();
-        report('alive');
-      });
-      hls.on(Hls.Events.ERROR, (_event, data) => {
-        if (data.fatal) report('dead');
-      });
-      hls.loadSource(url);
-      hls.attachMedia(video);
-      return () => {
-        stop();
-        hls.destroy();
-      };
-    }
-
-    if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      const ok = () => report('alive');
-      const bad = () => report('dead');
-      video.addEventListener('loadeddata', ok);
-      video.addEventListener('error', bad);
-      video.src = url;
-      play();
-      return () => {
-        stop();
-        video.removeEventListener('loadeddata', ok);
-        video.removeEventListener('error', bad);
-        video.removeAttribute('src');
-        video.load();
-      };
-    }
-
-    // This browser can't play HLS at all; that says nothing about the camera.
-    stop();
-    failed = true;
-    return stop;
+      if (status !== 'unsupported') onliveness(id, status);
+    });
   });
 
   function fullscreen() {
