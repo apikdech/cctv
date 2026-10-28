@@ -9,6 +9,9 @@ for f in "${CCTV_ENV_FILE:-}" /etc/cctv-status.env "${HOME:-/nonexistent}/.confi
   if [ -n "$f" ] && [ -r "$f" ]; then . "$f"; break; fi
 done
 : "${GITHUB_TOKEN:?GITHUB_TOKEN is not set (see docs/deploy.md)}"
+# The credential helper runs in a child process; a sourced-but-unexported
+# variable would be invisible there and GitHub would reject the empty password.
+export GITHUB_TOKEN
 
 REPO=${GITHUB_REPO:-apikdech/cctv}
 BRANCH=${STATUS_BRANCH:-status}
