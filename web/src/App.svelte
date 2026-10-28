@@ -7,6 +7,7 @@
   import { formatHash, resolveHashCamera } from './lib/hash';
   import { applyResults, checkAll, loadCache, probe, saveCache, type LivenessCache } from './lib/liveness';
   import { visibleCameras } from './lib/search';
+  import { loadStatus } from './lib/status';
   import type { Camera, LivenessMap, Toggles } from './lib/types';
 
   type Status = 'alive' | 'dead';
@@ -75,7 +76,7 @@
     const flush = setInterval(() => record(pending.splice(0), playerResolved), FLUSH_MS);
     try {
       await checkAll(
-        cameras.filter((c) => !(c.id in cache)),
+        cameras.filter((c) => !(c.id in liveness)),
         { concurrency: 4, probe: (url) => probe(url), onResult: (id, status) => pending.push([id, status]) },
       );
     } finally {
@@ -88,7 +89,10 @@
     (async () => {
       cameras = await (await fetch('/cameras.json')).json();
       cache = loadCache(storage(), Date.now());
-      liveness = Object.fromEntries(Object.entries(cache).map(([id, e]) => [id, e.status]));
+      const cached = Object.fromEntries(Object.entries(cache).map(([id, e]) => [id, e.status]));
+      // Server-side status wins over a stale local cache; anything still unknown
+      // falls through to probing from the browser.
+      liveness = { ...cached, ...(await loadStatus()) };
       syncFromHash();
       await checkStreams();
     })();
