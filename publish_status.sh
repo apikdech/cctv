@@ -3,6 +3,7 @@
 # The site reads that branch instead of probing ~714 streams per visitor.
 # Run from cron every 6 hours; see docs/deploy.md.
 set -euo pipefail
+export GIT_TERMINAL_PROMPT=0
 
 for f in "${CCTV_ENV_FILE:-}" /etc/cctv-status.env "${HOME:-/nonexistent}/.config/cctv-status.env"; do
   if [ -n "$f" ] && [ -r "$f" ]; then . "$f"; break; fi
@@ -21,6 +22,7 @@ command -v flock >/dev/null || { echo "flock is missing (install util-linux)" >&
 exec 9>/tmp/cctv-status.lock
 flock -n 9 || { echo "already running"; exit 0; }
 
+echo "cctv-status: $(date -u +%FT%TZ) fetching main in $WORK_DIR"
 git fetch -q --depth 1 origin main
 git reset -q --hard FETCH_HEAD
 

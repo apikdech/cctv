@@ -10,6 +10,7 @@ docs/deploy.md.
 
 import json
 import os
+import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
@@ -19,6 +20,7 @@ CAMERAS = Path("web/public/cameras.json")
 OUT = Path("status.json")
 CONCURRENCY = 3
 PROGRESS_EVERY = 50
+PROGRESS_SECONDS = 30
 TIMEOUT = 10
 USER_AGENT = "cctv-jogja-map/1.0 (+https://github.com/apikdech/cctv)"
 
@@ -43,12 +45,15 @@ def build_status(cameras: list[dict], probe_fn, generated_at: str, progress=None
     total = len(ordered)
     alive = 0
     results = []
+    last = time.monotonic()
     with ThreadPoolExecutor(max_workers=CONCURRENCY) as pool:
         for done, ok in enumerate(pool.map(lambda c: bool(probe_fn(c["url"])), ordered), start=1):
             results.append(ok)
             alive += ok
-            if progress and (done % PROGRESS_EVERY == 0 or done == total):
+            now = time.monotonic()
+            if progress and (done % PROGRESS_EVERY == 0 or done == total or now - last >= PROGRESS_SECONDS):
                 progress(f"{done}/{total} probed, {alive} alive")
+                last = now
     return {
         "generatedAt": generated_at,
         "cameras": {
@@ -67,6 +72,7 @@ def write_status(path: Path, status: dict) -> None:
 
 def main() -> None:
     cameras = json.loads(CAMERAS.read_text(encoding="utf-8"))
+    print(f"probing {len(cameras)} cameras, {CONCURRENCY} at a time", flush=True)
     generated_at = (
         datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
     )
