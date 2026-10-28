@@ -31,7 +31,7 @@
   let trip: Trip | null = $state(null);
   let cache: LivenessCache = {};
   let themeChoice = $state(loadThemeChoice(storage()));
-  let prefersDark = $state(false);
+  let prefersDark = $state(prefersDarkQuery()?.matches ?? false);
   let panelWidth = $state(loadSize(storage(), SIDEBAR.key, SIDEBAR.fallback));
   let sheetHeight = $state(loadSize(storage(), SHEET.key, SHEET.fallback));
   let viewportWidth = $state(innerWidth);

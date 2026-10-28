@@ -196,15 +196,26 @@
 
   // A style swap drops custom sources and layers, so they are re-added once the
   // new style loads. `fitted` and `lastFlownId` keep the view where it was.
+  // If the new style never arrives the map would stay inert for the rest of the
+  // session, so a failed swap just keeps the style that is already on screen
+  // working; the next theme change tries again.
   $effect(() => {
     if (!ready || theme === styledTheme) return;
     styledTheme = theme;
     ready = false;
     map!.setStyle(MAP_STYLE[theme], { diff: false });
-    map!.once('style.load', () => {
+
+    const onLoad = () => {
+      map!.off('error', onError);
       addLayers(map!, theme);
       ready = true;
-    });
+    };
+    const onError = () => {
+      map!.off('style.load', onLoad);
+      ready = true;
+    };
+    map!.once('style.load', onLoad);
+    map!.once('error', onError);
   });
 
   $effect(() => {

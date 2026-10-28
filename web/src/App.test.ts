@@ -4,7 +4,12 @@ import { it, expect, vi, beforeEach } from 'vitest';
 
 vi.mock('maplibre-gl', () => ({
   Map: class {
+    constructor(options: { style?: string }) {
+      mapOptions.push(options);
+    }
     on() {}
+    once() {}
+    setStyle() {}
     addSource() {}
     addLayer() {}
     fitBounds() {}
@@ -49,6 +54,8 @@ vi.mock('hls.js', () => {
 
 import App from './App.svelte';
 
+const { mapOptions } = vi.hoisted(() => ({ mapOptions: [] as { style?: string }[] }));
+
 const cams = [
   { id: 'kota-1', ref: 1, dataset: 'kota', title: 'Simpang_A', url: 'u1', lat: -7.8, lon: 110.36, kecamatan: 'GONDOKUSUMAN', kelurahan: '', owner: '', slug: '', source: 'official', lastSeen: null },
   { id: 'kota-2', ref: 2, dataset: 'kota', title: 'Simpang_B', url: 'u2', lat: -7.81, lon: 110.37, kecamatan: 'GONDOKUSUMAN', kelurahan: '', owner: '', slug: '', source: 'official', lastSeen: null },
@@ -58,6 +65,7 @@ const cams = [
 beforeEach(() => {
   history.replaceState(null, '', '/');
   localStorage.clear();
+  mapOptions.length = 0;
   delete document.documentElement.dataset.theme;
   HTMLMediaElement.prototype.play = vi.fn().mockResolvedValue(undefined);
   vi.stubGlobal('fetch', vi.fn(async (input: RequestInfo | URL) => {
@@ -166,6 +174,23 @@ it('leaves the arrow keys alone on the list', async () => {
   await screen.findByText('Simpang A');
   await userEvent.keyboard('{ArrowDown}');
   expect(location.hash).toBe('');
+});
+
+it('starts on the dark map style when the system is dark', async () => {
+  window.matchMedia = vi.fn().mockImplementation((media: string) => ({
+    matches: true,
+    media,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  })) as unknown as typeof window.matchMedia;
+  try {
+    render(App);
+    await screen.findByText('Simpang A');
+    expect(mapOptions[0]?.style).toBe('https://tiles.openfreemap.org/styles/dark');
+    expect(document.documentElement.dataset.theme).toBe('dark');
+  } finally {
+    delete (window as { matchMedia?: unknown }).matchMedia;
+  }
 });
 
 it('opening the wall tears down the single player underneath', async () => {
