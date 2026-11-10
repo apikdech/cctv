@@ -14,7 +14,7 @@
   import { loadStatus } from './lib/status';
   import { nextTarget, startTrip, stepBack, stepForward, tripKey, type Trip } from './lib/trip';
   import { loadThemeChoice, nextChoice, prefersDarkQuery, resolveTheme, saveThemeChoice } from './lib/theme';
-  import { addToWall, removeFromWall, swapInWall } from './lib/wall';
+  import { addToWall, loadWall, removeFromWall, saveWall, swapInWall } from './lib/wall';
   import type { Camera, LivenessMap, Toggles } from './lib/types';
 
   type Status = 'alive' | 'dead';
@@ -162,6 +162,7 @@
     const next = wallIds.includes(id) ? removeFromWall(wallIds, id) : addToWall(wallIds, id);
     if (next === wallIds) return;
     wallIds = next;
+    saveWall(storage(), wallIds);
     if (!wallOpen) return;
     if (wallIds.length === 0) closeWall();
     else history.replaceState(null, '', formatWallHash(wallIds));
@@ -171,6 +172,7 @@
     const next = swapInWall(wallIds, fromId, toId);
     if (next === wallIds) return;
     wallIds = next;
+    saveWall(storage(), wallIds);
     if (wallOpen) history.replaceState(null, '', formatWallHash(wallIds));
   }
 
@@ -178,6 +180,7 @@
     const wall = resolveWallHash(location.hash, cameras);
     if (wall.length) {
       wallIds = wall;
+      saveWall(storage(), wallIds);
       wallOpen = true;
       return;
     }
@@ -207,6 +210,7 @@
   onMount(() => {
     (async () => {
       cameras = await (await fetch('/cameras.json')).json();
+      wallIds = loadWall(storage(), cameras);
       cache = loadCache(storage(), Date.now());
       const cached = Object.fromEntries(Object.entries(cache).map(([id, e]) => [id, e.status]));
       // Server-side status wins over a stale local cache; anything still unknown

@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/svelte';
+import { fireEvent, render, screen, within } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 import { it, expect, vi, beforeEach } from 'vitest';
 
@@ -88,6 +88,79 @@ it('drops a wall link that resolves to nothing', async () => {
   await screen.findByText('Simpang A');
   expect(location.hash).toBe('');
   expect(screen.queryByTestId('grid')).toBeNull();
+});
+
+it('restores a saved wall on the map in its saved order', async () => {
+  localStorage.setItem('cctv-wall', '["kota-2","kota-1"]');
+  const { container } = render(App);
+  await userEvent.click(await screen.findByRole('button', { name: 'Wall (2)' }));
+  expect(location.hash).toBe('#wall=kota-2,kota-1');
+  expect((container.querySelector('[data-tile="kota-2"]') as HTMLElement).style.order).toBe('0');
+  expect((container.querySelector('[data-tile="kota-1"]') as HTMLElement).style.order).toBe('1');
+});
+
+it('restores saved wall alongside a camera link without opening it', async () => {
+  localStorage.setItem('cctv-wall', '["kota-2","kota-1"]');
+  history.replaceState(null, '', '/#cam=kota-3');
+  render(App);
+  expect(await screen.findByRole('button', { name: 'Wall (2)' })).toBeInTheDocument();
+  expect(location.hash).toBe('#cam=kota-3');
+  expect(screen.queryByTestId('grid')).toBeNull();
+});
+
+it('valid wall links override and save the selection, including on hashchange', async () => {
+  localStorage.setItem('cctv-wall', '["kota-1"]');
+  history.replaceState(null, '', '/#wall=kota-3');
+  render(App);
+  await screen.findByTestId('grid');
+  expect(localStorage.getItem('cctv-wall')).toBe('["kota-3"]');
+  location.hash = '#wall=kota-2,kota-1';
+  await vi.waitFor(() => expect(localStorage.getItem('cctv-wall')).toBe('["kota-2","kota-1"]'));
+});
+
+it('invalid wall links retain the saved selection', async () => {
+  localStorage.setItem('cctv-wall', '["kota-1"]');
+  history.replaceState(null, '', '/#wall=nope');
+  render(App);
+  expect(await screen.findByRole('button', { name: 'Wall (1)' })).toBeInTheDocument();
+  expect(location.hash).toBe('');
+  expect(localStorage.getItem('cctv-wall')).toBe('["kota-1"]');
+  expect(screen.queryByTestId('grid')).toBeNull();
+});
+
+it('saves additions, removals and swaps across remounts', async () => {
+  const { container, unmount } = render(App);
+  await userEvent.click(await screen.findByText('Simpang A'));
+  await userEvent.click(addPlayingCamera());
+  expect(localStorage.getItem('cctv-wall')).toBe('["kota-1"]');
+  await userEvent.click(within(document.querySelector('aside') as HTMLElement).getByRole('button', { name: /Simpang B/ }));
+  await userEvent.click(addPlayingCamera());
+  await userEvent.click(screen.getByRole('button', { name: 'Wall (2)' }));
+  await fireEvent.dragStart(container.querySelector('[data-tile="kota-1"]')!);
+  await fireEvent.drop(container.querySelector('[data-tile="kota-2"]')!);
+  expect(localStorage.getItem('cctv-wall')).toBe('["kota-2","kota-1"]');
+  await userEvent.click(screen.getByLabelText('Remove Simpang A from wall'));
+  expect(localStorage.getItem('cctv-wall')).toBe('["kota-2"]');
+  await userEvent.click(screen.getByText('← map'));
+  expect(localStorage.getItem('cctv-wall')).toBe('["kota-2"]');
+  unmount();
+  history.replaceState(null, '', '/');
+  render(App);
+  expect(await screen.findByRole('button', { name: 'Wall (1)' })).toBeInTheDocument();
+  expect(screen.queryByTestId('grid')).toBeNull();
+});
+
+it('allows wall use if localStorage access is blocked', async () => {
+  const spy = vi.spyOn(window, 'localStorage', 'get').mockImplementation(() => { throw Error('blocked'); });
+  try {
+    render(App);
+    await userEvent.click(await screen.findByText('Simpang A'));
+    await userEvent.click(addPlayingCamera());
+    await userEvent.click(screen.getByRole('button', { name: 'Wall (1)' }));
+    expect(screen.getByTestId('grid')).toBeInTheDocument();
+  } finally {
+    spy.mockRestore();
+  }
 });
 
 const addPlayingCamera = () => within(document.querySelector('.info') as HTMLElement).getByText('Add to wall');
