@@ -1,4 +1,32 @@
+import type { Camera } from './types';
+
 export const MAX_WALL = 8;
+export const WALL_KEY = 'cctv-wall';
+
+export function loadWall(storage: Storage | null, cameras: Pick<Camera, 'id'>[]): string[] {
+  try {
+    const value: unknown = JSON.parse(storage?.getItem(WALL_KEY) ?? 'null');
+    if (!Array.isArray(value)) return [];
+    const known = new Set(cameras.map((camera) => camera.id));
+    const ids: string[] = [];
+    for (const id of value) {
+      if (typeof id === 'string' && known.has(id) && !ids.includes(id)) ids.push(id);
+      if (ids.length === MAX_WALL) break;
+    }
+    return ids;
+  } catch {
+    return [];
+  }
+}
+
+export function saveWall(storage: Storage | null, ids: string[]): void {
+  try {
+    if (ids.length) storage?.setItem(WALL_KEY, JSON.stringify(ids));
+    else storage?.removeItem(WALL_KEY);
+  } catch {
+    // Storage blocked: the wall still works for this visit.
+  }
+}
 
 /** Columns × rows per camera count; the wall is wider than it is tall. */
 const GRIDS = [
