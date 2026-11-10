@@ -158,6 +158,12 @@
     history.replaceState(null, '', listUrl());
   }
 
+  function clearWall() {
+    wallIds = [];
+    saveWall(storage(), wallIds);
+    closeWall();
+  }
+
   function toggleWall(id: string) {
     const next = wallIds.includes(id) ? removeFromWall(wallIds, id) : addToWall(wallIds, id);
     if (next === wallIds) return;
@@ -316,6 +322,7 @@
     <Wall
       cameras={wallCameras}
       onclose={closeWall}
+      onclear={clearWall}
       onremove={toggleWall}
       onswap={swapTiles}
       onliveness={recordPlayback}

@@ -163,6 +163,45 @@ it('allows wall use if localStorage access is blocked', async () => {
   }
 });
 
+it('clears a linked wall without disturbing other preferences', async () => {
+  localStorage.setItem('cctv-theme', 'dark');
+  localStorage.setItem('cctv-panel-width', '450');
+  history.replaceState(null, '', '/#wall=kota-1,kota-2');
+  const { unmount } = render(App);
+  await userEvent.click(await screen.findByRole('button', { name: 'Clear wall' }));
+  expect(screen.queryByTestId('grid')).toBeNull();
+  expect(screen.queryByRole('button', { name: /Wall \(/ })).toBeNull();
+  expect(location.hash).toBe('');
+  expect(localStorage.getItem('cctv-wall')).toBeNull();
+  expect(localStorage.getItem('cctv-theme')).toBe('dark');
+  expect(localStorage.getItem('cctv-panel-width')).toBe('450');
+  unmount();
+  render(App);
+  await screen.findByText('Simpang A');
+  expect(screen.queryByRole('button', { name: /Wall \(/ })).toBeNull();
+});
+
+it('clearing a wall opened from a camera returns to that camera', async () => {
+  render(App);
+  await userEvent.click(await screen.findByText('Simpang A'));
+  await userEvent.click(addPlayingCamera());
+  await userEvent.click(screen.getByRole('button', { name: 'Wall (1)' }));
+  await userEvent.click(screen.getByRole('button', { name: 'Clear wall' }));
+  expect(location.hash).toBe('#cam=kota-1');
+  expect(screen.queryByTestId('grid')).toBeNull();
+  expect(localStorage.getItem('cctv-wall')).toBeNull();
+});
+
+it('removing the last tile clears the saved wall and closes it', async () => {
+  history.replaceState(null, '', '/#wall=kota-1');
+  render(App);
+  await screen.findByTestId('grid');
+  await userEvent.click(screen.getByLabelText('Remove Simpang A from wall'));
+  expect(screen.queryByTestId('grid')).toBeNull();
+  expect(localStorage.getItem('cctv-wall')).toBeNull();
+  expect(location.hash).toBe('');
+});
+
 const addPlayingCamera = () => within(document.querySelector('.info') as HTMLElement).getByText('Add to wall');
 
 it('leaving the wall clears the wall from the URL', async () => {

@@ -31,7 +31,7 @@ import type { Camera } from '../lib/types';
 
 const cam = (id: string): Camera => ({ id, ref: 1, dataset: 'kota', title: `Cam_${id}`, url: `u${id}`, lat: 0, lon: 0, kecamatan: '', kelurahan: '', owner: '', slug: '', source: 'official', lastSeen: null });
 const cameras = [cam('a'), cam('b'), cam('c')];
-const props = (cams: Camera[] = cameras) => ({ cameras: cams, onclose: vi.fn(), onremove: vi.fn(), onswap: vi.fn(), onliveness: vi.fn() });
+const props = (cams: Camera[] = cameras) => ({ cameras: cams, onclose: vi.fn(), onclear: vi.fn(), onremove: vi.fn(), onswap: vi.fn(), onliveness: vi.fn() });
 
 beforeEach(() => {
   instances.length = 0;
@@ -72,6 +72,15 @@ it('remove button reports the id', async () => {
   render(Wall, p);
   await userEvent.click(screen.getByLabelText('Remove Cam a from wall'));
   expect(p.onremove).toHaveBeenCalledWith('a');
+});
+
+it('clear wall reports a clear action', async () => {
+  const p = props();
+  render(Wall, p);
+  await userEvent.click(screen.getByRole('button', { name: 'Clear wall' }));
+  expect(p.onclear).toHaveBeenCalledOnce();
+  expect(p.onclose).not.toHaveBeenCalled();
+  expect(p.onremove).not.toHaveBeenCalled();
 });
 
 it('back button and M close the wall', async () => {

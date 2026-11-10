@@ -6,11 +6,12 @@
   interface Props {
     cameras: Camera[];
     onclose: () => void;
+    onclear: () => void;
     onremove: (id: string) => void;
     onswap: (fromId: string, toId: string) => void;
     onliveness: (id: string, status: 'alive' | 'dead') => void;
   }
-  let { cameras, onclose, onremove, onswap, onliveness }: Props = $props();
+  let { cameras, onclose, onclear, onremove, onswap, onliveness }: Props = $props();
 
   const grid = $derived(gridFor(cameras.length));
   // Tiles are rendered in a stable order and placed with CSS `order`, so a
@@ -44,6 +45,7 @@
   <header>
     <button class="back" type="button" onclick={onclose}>← map</button>
     <span class="count">{cameras.length} {cameras.length === 1 ? 'camera' : 'cameras'}</span>
+    <button class="clear" type="button" onclick={onclear}>Clear wall</button>
   </header>
 
   <div
@@ -99,6 +101,17 @@
   .count {
     font-size: 13px;
     color: #9ca3af;
+  }
+  .clear {
+    margin-left: auto;
+    padding: 4px 8px;
+    border: 1px solid #4b5563;
+    border-radius: 4px;
+    background: none;
+    font: inherit;
+    font-size: 13px;
+    color: #e5e7eb;
+    cursor: pointer;
   }
   .grid {
     flex: 1;
