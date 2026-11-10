@@ -9,7 +9,7 @@ Keep a user's chosen wall cameras and their order across visits in the same brow
 - Automatically save camera IDs in localStorage after adding, removing, or reordering cameras.
 - On a normal visit, restore the saved selection after the camera catalogue loads, but show the map with the existing **Wall (N)** button. Do not open the wall automatically.
 - Existing valid shared wall links continue to open the linked wall; their camera selection replaces the saved wall.
-- Add a **Clear wall** button to the wall header. It removes all selected cameras and the saved wall, closes the wall, and returns to the map. Other saved preferences remain untouched.
+- Add a **Clear wall** button to the wall header. It removes all selected cameras and the saved wall, closes the wall, and returns to the previous map or camera view. Other saved preferences remain untouched.
 - Preserve existing map/camera navigation and wall-link behavior.
 
 ## Constraints and failure behavior

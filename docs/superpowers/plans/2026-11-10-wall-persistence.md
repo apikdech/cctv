@@ -1,6 +1,6 @@
 # Saved Wall Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Automatically persist wall camera selection and order, restore it on the map, and provide a Clear wall button.
 
@@ -32,12 +32,12 @@
 
 **Interfaces:** Export `WALL_KEY = 'cctv-wall'`, `loadWall(storage: Storage | null, cameras: Pick<Camera, 'id'>[]): string[]`, and `saveWall(storage: Storage | null, ids: string[]): void`.
 
-- [ ] Add failing tests: round-trip `['b', 'a']` with catalogue `a,b`; null/missing/malformed/scalar/object data returns `[]`; unknown, duplicate and non-string array entries are discarded; ten known IDs restore only the first eight. Assert the exact key `cctv-wall`.
-- [ ] Add failing tests: saving `[]` removes only `cctv-wall`; null storage and throwing getItem/setItem/removeItem are safe.
-- [ ] Run `pnpm test -- src/lib/wall.test.ts` from `web` and confirm new tests fail on missing helpers.
-- [ ] Implement the interfaces using JSON arrays, catalogue validation, existing `MAX_WALL`, and try/catch matching `theme.ts`; leave existing wall operations unchanged.
-- [ ] Run the targeted tests and confirm all pass.
-- [ ] Commit only Task 1 files with message `feat: add wall storage helpers`.
+- [x] Add failing tests: round-trip `['b', 'a']` with catalogue `a,b`; null/missing/malformed/scalar/object data returns `[]`; unknown, duplicate and non-string array entries are discarded; ten known IDs restore only the first eight. Assert the exact key `cctv-wall`.
+- [x] Add failing tests: saving `[]` removes only `cctv-wall`; null storage and throwing getItem/setItem/removeItem are safe.
+- [x] Run `pnpm test -- src/lib/wall.test.ts` from `web` and confirm new tests fail on missing helpers.
+- [x] Implement the interfaces using JSON arrays, catalogue validation, existing `MAX_WALL`, and try/catch matching `theme.ts`; leave existing wall operations unchanged.
+- [x] Run the targeted tests and confirm all pass.
+- [x] Commit only Task 1 files with message `feat: add wall storage helpers`.
 
 ## Task 2: App persistence and restoration
 
@@ -45,13 +45,13 @@
 
 **Interfaces:** Consume Task 1 helpers. No new component props in this task.
 
-- [ ] Add failing integration tests: seed `cctv-wall` with `['kota-2','kota-1']`, render App, assert **Wall (2)** and no grid; open it and assert hash `#wall=kota-2,kota-1` and tile CSS order. Seed a saved wall alongside `#cam=kota-3` and assert that camera opens while **Wall (2)** remains available.
-- [ ] Add failing tests: valid `#wall=kota-3` overrides and saves an older selection on initial load and hashchange; invalid `#wall=nope` removes the bad hash but retains saved selection without opening the grid.
-- [ ] Add failing tests: adding saves `['kota-1']`; removing saves remaining IDs; drag/drop swaps persist their order; returning to map does not clear storage. Unmount, remove the URL hash, remount, and verify the last saved selection survives. A throwing localStorage getter still permits adding/opening a wall.
-- [ ] Run `pnpm test -- src/App.test.ts` and confirm the new persistence expectations fail.
-- [ ] Load saved IDs immediately after catalogue loading, before `syncFromHash()`. Call `saveWall` after successful add/remove/swap and valid wall hash import. Avoid a reactive save that could overwrite storage during initial empty state.
-- [ ] Run `pnpm test -- src/App.test.ts src/lib/wall.test.ts` and confirm all pass.
-- [ ] Commit only Task 2 files with message `feat: restore and autosave camera walls`.
+- [x] Add failing integration tests: seed `cctv-wall` with `['kota-2','kota-1']`, render App, assert **Wall (2)** and no grid; open it and assert hash `#wall=kota-2,kota-1` and tile CSS order. Seed a saved wall alongside `#cam=kota-3` and assert that camera opens while **Wall (2)** remains available.
+- [x] Add failing tests: valid `#wall=kota-3` overrides and saves an older selection on initial load and hashchange; invalid `#wall=nope` removes the bad hash but retains saved selection without opening the grid.
+- [x] Add failing tests: adding saves `['kota-1']`; removing saves remaining IDs; drag/drop swaps persist their order; returning to map does not clear storage. Unmount, remove the URL hash, remount, and verify the last saved selection survives. A throwing localStorage getter still permits adding/opening a wall.
+- [x] Run `pnpm test -- src/App.test.ts` and confirm the new persistence expectations fail.
+- [x] Load saved IDs immediately after catalogue loading, before `syncFromHash()`. Call `saveWall` after successful add/remove/swap and valid wall hash import. Avoid a reactive save that could overwrite storage during initial empty state.
+- [x] Run `pnpm test -- src/App.test.ts src/lib/wall.test.ts` and confirm all pass.
+- [x] Commit only Task 2 files with message `feat: restore and autosave camera walls`.
 
 ## Task 3: Clear wall and final verification
 
@@ -59,10 +59,10 @@
 
 **Interfaces:** Add required `onclear: () => void` Wall prop. App provides `clearWall(): void` that sets IDs to `[]`, saves emptiness, and calls `closeWall()`.
 
-- [ ] Add failing Wall test: clicking the accessible **Clear wall** button calls `onclear` once without calling `onclose` or `onremove`; add `onclear: vi.fn()` to shared test props.
-- [ ] Add failing App tests: clear a linked wall and a wall opened from a selected camera, assert no grid/no Wall button/no saved key and correct map or camera URL. Seed theme and panel preferences and assert they survive. Unmount/remount at `/` and assert the cleared wall stays gone. Removing the final tile must also delete the key and close the wall.
-- [ ] Run `pnpm test -- src/components/Wall.test.ts src/App.test.ts` and confirm the new clear expectations fail.
-- [ ] Add a header button labeled **Clear wall**, matching the existing compact dark-header style and aligned opposite map/count. Wire the callback and implement `clearWall` using Task 1 helpers and existing close navigation.
-- [ ] Run `pnpm test`, `pnpm check`, and `pnpm build` from `web`; expect all tests passing, zero check errors, and successful build. Before Node commands, source nvm if necessary and run `nvm use` in `web`.
-- [ ] Review the diff against the spec, including error paths and URL precedence; fix any gaps and rerun affected checks.
-- [ ] Mark spec/plan checkboxes complete and commit only feature files/docs with message `feat: add clear wall action`.
+- [x] Add failing Wall test: clicking the accessible **Clear wall** button calls `onclear` once without calling `onclose` or `onremove`; add `onclear: vi.fn()` to shared test props.
+- [x] Add failing App tests: clear a linked wall and a wall opened from a selected camera, assert no grid/no Wall button/no saved key and correct map or camera URL. Seed theme and panel preferences and assert they survive. Unmount/remount at `/` and assert the cleared wall stays gone. Removing the final tile must also delete the key and close the wall.
+- [x] Run `pnpm test -- src/components/Wall.test.ts src/App.test.ts` and confirm the new clear expectations fail.
+- [x] Add a header button labeled **Clear wall**, matching the existing compact dark-header style and aligned opposite map/count. Wire the callback and implement `clearWall` using Task 1 helpers and existing close navigation.
+- [x] Run `pnpm test`, `pnpm check`, and `pnpm build` from `web`; expect all tests passing, zero check errors, and successful build. Before Node commands, source nvm if necessary and run `nvm use` in `web`.
+- [x] Review the diff against the spec, including error paths and URL precedence; fix any gaps and rerun affected checks.
+- [x] Mark spec/plan checkboxes complete and commit only feature files/docs with message `feat: add clear wall action`.
